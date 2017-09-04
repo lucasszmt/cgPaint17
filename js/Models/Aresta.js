@@ -46,4 +46,15 @@ class Aresta {
         this.pontoB.y *= S_y;
     }
 
+    rotacionarPontos(theta) {
+        let x_l = (this.pontoA.x * Math.cos(theta)) - (this.pontoA.y * Math.sin(theta));
+        let y_l = (this.pontoA.x * Math.sin(theta)) + (this.pontoA.y * Math.cos(theta));
+        this.pontoA.x = x_l;
+        this.pontoA.y = y_l;
+
+        x_l = (this.pontoB.x * Math.cos(theta)) - (this.pontoB.y * Math.sin(theta));
+        y_l = (this.pontoB.x * Math.sin(theta)) + (this.pontoB.y * Math.cos(theta));
+        this.pontoB.x = x_l;
+        this.pontoB.y = y_l;
+    }
 }

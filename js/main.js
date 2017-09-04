@@ -140,13 +140,8 @@ function translar(poligono, x_diff, y_diff) {
 
 function escalonar(poligono, S_x, S_y) {
 
-    // console.log(poligono._x_max);
-
-
     let centro_x = (poligono.x_max + poligono.x_min) / 2;
     let centro_y = (poligono.y_max + poligono.y_min) / 2;
-
-    // console.log(centro_x + ' ' + centro_y);
 
     poligono.x_max *= S_x;
     poligono.x_min *= S_x;
@@ -161,14 +156,27 @@ function escalonar(poligono, S_x, S_y) {
     let centro_x_atual = (poligono.x_max + poligono.x_min) / 2;
     let centro_y_atual = (poligono.y_max + poligono.y_min) / 2;
 
-    let diffx = centro_x -centro_x_atual;
+    let diffx = centro_x - centro_x_atual;
     let diffy = centro_y - centro_y_atual;
-
-    console.log(diffx + ' ' + diffy);
-
 
     translar(poligono, diffx, diffy);
 
     // reeiniciaTela(canvas, poligonos);
     // drawSelectionRect(poligonos, selecionado_index);
+}
+
+function rotacionar(poligono, theta) {
+
+    // trazendo para origem
+    diffx = 0 - poligono.x_min;
+    diffy = 0 - poligono.y_min;
+    console.log(diffx)
+    translar(poligono, diffx, 0 - poligono.y_min);
+
+    // rotacionando
+    poligono.arestas.forEach(function (e, index) {
+        poligono.arestas[index].rotacionarPontos(theta);
+    });
+
+    reeiniciaTela(canvas, poligonos);
 }
