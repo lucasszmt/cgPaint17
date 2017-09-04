@@ -42,6 +42,15 @@ $('#selecionar').click(function () {
     opcao = 3;
 });
 
+$('#translar').click(function () {
+    if (selecionado) {
+        opcao = 4;
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+
 // remove o elemento selecionado
 $('#remover').click(function () {
     if (selecionado) {

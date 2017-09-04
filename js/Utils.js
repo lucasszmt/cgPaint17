@@ -119,3 +119,20 @@ function verificaPontoRect(p, poligono) {
         return true;
     }
 }
+
+/**
+ * Método de desenho do retangulo de seleção dos poligonos
+ *
+ * @param poligonos
+ * @param index
+ */
+function drawSelectionRect(poligonos, index) {
+    context.beginPath();
+    context.moveTo(poligonos[index].x_min, poligonos[index].y_min);
+    context.lineTo(poligonos[index].x_max, poligonos[index].y_min);
+    context.lineTo(poligonos[index].x_max, poligonos[index].y_max);
+    context.lineTo(poligonos[index].x_min, poligonos[index].y_max);
+    context.closePath();
+    context.strokeStyle = '#544aff';
+    context.stroke();
+}

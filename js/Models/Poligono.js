@@ -7,6 +7,8 @@ class Poligono {
         this._y_max = y_max;
         this._y_min = y_min;
         this._cor = '#000000';
+        this._cor_de_fundo = '#FFFFFF';
+        this._preenchido = false;
     }
 
     get arestas() {
@@ -55,5 +57,21 @@ class Poligono {
 
     set cor(value) {
         this._cor = value;
+    }
+
+    get cor_de_fundo() {
+        return this._cor_de_fundo;
+    }
+
+    set cor_de_fundo(value) {
+        this._cor_de_fundo = value;
+    }
+
+    get preenchido() {
+        return this._preenchido;
+    }
+
+    set preenchido(value) {
+        this._preenchido = value;
     }
 }

@@ -19,7 +19,7 @@
 
 <div class="container-fluid menu">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <div class="btn-group-vertical" role="group" aria-label="...">
                 <label for="pencil">Desenho Livre</label>
                 <button id="pencil" type="button" class="btn btn-default btn-sm">
@@ -42,16 +42,22 @@
                 </button>
                 <hr>
 
-                <button id="selecionar" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Ferramenta de Seleção
-                </button>
-                <button id="remover" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remover
-                </button>
+                <div class="btn-group btn-group-justified">
+
+                    <button id="selecionar" type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Ferramenta de Seleção
+                    </button>
+                    <button id="remover" type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remover
+                    </button>
+                </div>
                 <hr>
+                <button id="translar" type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Translar
+                </button>
             </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-sm-10">
             <canvas id="canvas" width="600" height="600" style="border: 1px solid black;">
             </canvas>
         </div>
@@ -83,7 +89,7 @@
     var poligonos = [];
     var ponto = new Ponto();
 
-    //opções
+    //globais
     var opcao = 1;
     var pontos = []; // para manter uma lista de pontos por precaução
     var ponto_temp;
@@ -93,13 +99,53 @@
     var selecionado = false;
     var selecionado_index;
 
+    var movendo = false;
+
+    var x_init;
+    var y_init;
+
     canvas.addEventListener('click', ev_mouseclick, false);
 
     // só pra verificar as coordenadas!
-    canvas.addEventListener('auxclick', function (ev) {
-        console.log(ev.offsetX, ev.offsetY);
-        p = new Ponto(ev.offsetX, ev.offsetY);
+//    canvas.addEventListener('auxclick', function (ev) {
+//        console.log(ev.offsetX, ev.offsetY);
+//        p = new Ponto(ev.offsetX, ev.offsetY);
+//    }, false);
+
+    canvas.addEventListener('mousedown', function(e) {
+        movendo = true;
+        x_init = e.offsetX;
+        y_init = e.offsetY;
+
+//        canvas.addEventListener('mousemove', function(e) {
+//            if (movendo) {
+////                console.log(e.offsetX + " " + e.offsetY)
+//            }
+//
+//            if (opcao == 4) {
+//                let x_diff = e.layerX - x_init;
+//                let y_diff = e.layerY - y_init;
+//
+//            console.log(x_diff + ' ' +  y_diff);
+////                translar(poligonos[selecionado_index], x_diff, y_diff);
+//            }
+//        });
     }, false);
+
+
+
+    canvas.addEventListener('mouseup', function (ev) {
+
+        movendo = false;
+        if (opcao == 4) {
+            let x_diff = ev.layerX - x_init;
+            let y_diff = ev.layerY - y_init;
+
+//            console.log(x_diff + ' ' +  y_diff);
+            translar(poligonos[selecionado_index], x_diff, y_diff);
+        }
+    });
+
 </script>
 
 </body>

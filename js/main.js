@@ -1,11 +1,11 @@
 // Pega as ações do mouse
 function ev_mouseclick(ev) {
     var x, y;
-
     switch (opcao) {
 
         // opção de desenho livre
         case 1:
+
             //inicia o desenho livre
             context.strokeStyle = "#000000";
 
@@ -100,14 +100,7 @@ function ev_mouseclick(ev) {
 
                     selecionado = true;
                     //desenhando caixa de seleção do poligono
-                    context.beginPath();
-                    context.moveTo(poligonos[i].x_min, poligonos[i].y_min);
-                    context.lineTo(poligonos[i].x_max, poligonos[i].y_min);
-                    context.lineTo(poligonos[i].x_max, poligonos[i].y_max);
-                    context.lineTo(poligonos[i].x_min, poligonos[i].y_max);
-                    context.closePath();
-                    context.strokeStyle = '#544aff';
-                    context.stroke();
+                    drawSelectionRect(poligonos, i);
                     break;
                 } else {
                     reeiniciaTela(canvas, poligonos);
@@ -119,4 +112,63 @@ function ev_mouseclick(ev) {
             break;
     }
 
+}
+
+
+/**
+ * Calcula diferença arrastada com o mouse e transalada o poligono
+ *
+ * @param poligono
+ * @param x_diff
+ * @param y_diff
+ */
+function translar(poligono, x_diff, y_diff) {
+
+    poligono.x_max += x_diff;
+    poligono.x_min += x_diff;
+    poligono.y_max += y_diff;
+    poligono.y_min += y_diff;
+
+    // translando
+    poligono.arestas.forEach(function (e, index) {
+        poligono.arestas[index].addDiff(x_diff, y_diff);
+    });
+
+    reeiniciaTela(canvas, poligonos);
+    drawSelectionRect(poligonos, selecionado_index);
+}
+
+function escalonar(poligono, S_x, S_y) {
+
+    // console.log(poligono._x_max);
+
+
+    let centro_x = (poligono.x_max + poligono.x_min) / 2;
+    let centro_y = (poligono.y_max + poligono.y_min) / 2;
+
+    // console.log(centro_x + ' ' + centro_y);
+
+    poligono.x_max *= S_x;
+    poligono.x_min *= S_x;
+    poligono.y_max *= S_y;
+    poligono.y_min *= S_y;
+
+    //  escalonando
+    poligono.arestas.forEach(function (e, index) {
+        poligono.arestas[index].multPontos(S_x, S_y);
+    });
+
+    let centro_x_atual = (poligono.x_max + poligono.x_min) / 2;
+    let centro_y_atual = (poligono.y_max + poligono.y_min) / 2;
+
+    let diffx = centro_x -centro_x_atual;
+    let diffy = centro_y - centro_y_atual;
+
+    console.log(diffx + ' ' + diffy);
+
+
+    translar(poligono, diffx, diffy);
+
+    // reeiniciaTela(canvas, poligonos);
+    // drawSelectionRect(poligonos, selecionado_index);
 }
