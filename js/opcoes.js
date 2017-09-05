@@ -17,7 +17,7 @@ $('#close_pencil').click(function () {
         //adicionando a ultima aresta, a de retorno
         let extremos_pol = extremos(pontos);
         poligonos.push(new Poligono(arestas, extremos_pol[0], extremos_pol[2],
-            extremos_pol[1], extremos_pol[3])); // cria um novo poligono
+            extremos_pol[1], extremos_pol[3], pontos)); // cria um novo poligono
         // limpa os pontos e arestas
         pontos = [];
         arestas = [];
@@ -50,6 +50,54 @@ $('#translar').click(function () {
     }
 });
 
+$('#escala-plus-x').click(function () {
+    if (selecionado) {
+        escalonar(poligonos[selecionado_index], 1.1, 1)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+$('#escala-plus-y').click(function () {
+    if (selecionado) {
+        escalonar(poligonos[selecionado_index], 1, 1.1)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+$('#escala-minus-x').click(function () {
+    if (selecionado) {
+        escalonar(poligonos[selecionado_index], 0.9, 1)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+$('#escala-minus-y').click(function () {
+    if (selecionado) {
+        escalonar(poligonos[selecionado_index], 1, 0.9)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+$('#cisalhamento-plus').click(function () {
+    if (selecionado) {
+        cisalhamento(poligonos[selecionado_index], -0.1)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
+$('#cisalhamento-minus').click(function () {
+    if (selecionado) {
+        cisalhamento(poligonos[selecionado_index], 0.1)
+    } else {
+        alert("Selecione um poligono antes!")
+    }
+});
+
 
 // remove o elemento selecionado
 $('#remover').click(function () {
@@ -62,6 +110,23 @@ $('#remover').click(function () {
     } else {
         alert("Selecione um objeto antes!");
     }
+});
+
+$('#save').click(function () {
+    var a = document.createElement("a");
+    //
+    // var aux = [
+    //     vertices,
+    //     arestas,
+    //     poligonos
+    // ];
+
+    var clone = JSON.stringify(poligonos); // Remove os ciclos
+
+    var file = new Blob([clone], {type: 'text/plain'});
+    a.href = URL.createObjectURL(file);
+    a.download = 'tela.fjd';
+    a.click();
 });
 
 

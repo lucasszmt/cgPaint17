@@ -1,6 +1,6 @@
 class Poligono {
 
-    constructor(arestas, x_max, x_min, y_max, y_min) {
+    constructor(arestas, x_max, x_min, y_max, y_min, pontos) {
         this._arestas = arestas;
         this._x_max = x_max;
         this._x_min = x_min;
@@ -9,6 +9,7 @@ class Poligono {
         this._cor = '#000000';
         this._cor_de_fundo = '#FFFFFF';
         this._preenchido = false;
+        this._pontos = pontos;
     }
 
     get arestas() {
@@ -73,5 +74,13 @@ class Poligono {
 
     set preenchido(value) {
         this._preenchido = value;
+    }
+
+    get pontos() {
+        return this._pontos;
+    }
+
+    set pontos(value) {
+        this._pontos = value;
     }
 }

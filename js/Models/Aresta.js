@@ -12,6 +12,14 @@ class Aresta {
         this._pontoA = value;
     }
 
+    set pontoAx(value) {
+        this._pontoA.x = value;
+    }
+
+    set pontoBx(value) {
+        this._pontoB.x = value;
+    }
+
     get pontoB() {
         return this._pontoB;
     }
@@ -47,14 +55,21 @@ class Aresta {
     }
 
     rotacionarPontos(theta) {
+        let aux = [];
+
         let x_l = (this.pontoA.x * Math.cos(theta)) - (this.pontoA.y * Math.sin(theta));
         let y_l = (this.pontoA.x * Math.sin(theta)) + (this.pontoA.y * Math.cos(theta));
         this.pontoA.x = x_l;
         this.pontoA.y = y_l;
+        // aux.push(x_l, y_l);
 
         x_l = (this.pontoB.x * Math.cos(theta)) - (this.pontoB.y * Math.sin(theta));
         y_l = (this.pontoB.x * Math.sin(theta)) + (this.pontoB.y * Math.cos(theta));
         this.pontoB.x = x_l;
         this.pontoB.y = y_l;
+        // aux.push(x_l, y_l);
+
+        // let aux = [this.pontoA.x, this.pontoA.y, this.pontoB.x, this.pontoB.y];
+        // return aux;
     }
 }

@@ -72,7 +72,7 @@ function polRegular(lados, raio, centro) {
     // ja adicionando as coordenadas aos poligonos
     arestas.push(new Aresta(ponto_temp, dots[0])); // fechando o poligono
     aux_dots = extremos(dots);
-    poligonos.push(new Poligono(arestas, aux_dots[0], aux_dots[2], aux_dots[1], aux_dots[3]));
+    poligonos.push(new Poligono(arestas, aux_dots[0], aux_dots[2], aux_dots[1], aux_dots[3], dots));
     arestas = [];
     console.log(dots);
     return dots;
@@ -102,6 +102,15 @@ function extremos(pontos) {
     });
 
     return [max_x, max_y, min_x, min_y];
+}
+
+function atualizaExtremos(poligono) {
+    aux = extremos(poligono.pontos);
+    poligono.x_max = aux[0];
+    poligono.y_max = aux[1];
+    poligono.x_min = aux[2];
+    poligono.y_min = aux[3];
+
 }
 
 /**

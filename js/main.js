@@ -161,17 +161,11 @@ function escalonar(poligono, S_x, S_y) {
 
     translar(poligono, diffx, diffy);
 
-    // reeiniciaTela(canvas, poligonos);
-    // drawSelectionRect(poligonos, selecionado_index);
+    reeiniciaTela(canvas, poligonos);
+    drawSelectionRect(poligonos, selecionado_index);
 }
 
-function rotacionar(poligono, theta) {
-
-    // trazendo para origem
-    diffx = 0 - poligono.x_min;
-    diffy = 0 - poligono.y_min;
-    console.log(diffx)
-    translar(poligono, diffx, 0 - poligono.y_min);
+function rotar(poligono, theta) {
 
     // rotacionando
     poligono.arestas.forEach(function (e, index) {
@@ -179,4 +173,62 @@ function rotacionar(poligono, theta) {
     });
 
     reeiniciaTela(canvas, poligonos);
+    drawSelectionRect(poligonos, selecionado_index);
+}
+
+function rotacao(poligono) {
+    // transla pra origem
+    let minx = -poligono.x_min;
+    let miny = -poligono.y_min;
+    translar(poligono, minx, miny);
+
+    rotar(poligono, 0.4);
+    reeiniciaTela(canvas, poligonos);
+
+}
+
+function cisalhamento(poligono, shx) {
+    let max_x = Number.NEGATIVE_INFINITY,
+        min_x = Number.POSITIVE_INFINITY;
+    let aux;
+
+    let centro_x = (poligono.x_max + poligono.x_min) / 2;
+    let centro_y = (poligono.y_max + poligono.y_min) / 2;
+
+
+    poligono.arestas.forEach(function (e, index) {
+        aux = poligono.arestas[index].pontoA.x + shx * poligono.arestas[index].pontoA.y;
+        poligono.arestas[index].pontoA.x = aux;
+
+        if (aux > max_x) {
+            max_x = aux;
+        }
+        if (aux < min_x) {
+            min_x = aux
+        }
+
+        aux = poligono.arestas[index].pontoB.x + shx * poligono.arestas[index].pontoB.y;
+        poligono.arestas[index].pontoB.x = aux;
+
+        if (aux > max_x) {
+            max_x = aux;
+        }
+        if (aux < min_x) {
+            min_x = aux
+        }
+    });
+
+    poligono.x_max = max_x;
+    poligono.x_min = min_x;
+
+    let centro_x_atual = (poligono.x_max + poligono.x_min) / 2;
+    let centro_y_atual = (poligono.y_max + poligono.y_min) / 2;
+
+    let diffx = centro_x - centro_x_atual;
+    let diffy = centro_y - centro_y_atual;
+
+    translar(poligono, diffx, diffy);
+
+    // reeiniciaTela(canvas, poligonos);
+    // drawSelectionRect(poligonos, selecionado_index);
 }
