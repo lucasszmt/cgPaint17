@@ -1,12 +1,12 @@
 class Poligono {
 
-    constructor(arestas, x_max, x_min, y_max, y_min, pontos) {
+    constructor(arestas, x_max, x_min, y_max, y_min, pontos, cor) {
         this._arestas = arestas;
         this._x_max = x_max;
         this._x_min = x_min;
         this._y_max = y_max;
         this._y_min = y_min;
-        this._cor = '#000000';
+        this._cor = cor;
         this._cor_de_fundo = '#FFFFFF';
         this._preenchido = false;
         this._pontos = pontos;

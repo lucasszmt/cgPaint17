@@ -31,7 +31,10 @@
                 <button id="save" type="button" class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Salvar
                 </button>
-
+                <button id="open" type="button" class="btn btn-default btn-sm" onclick="document.getElementById('openFileID').click(); return false;">
+                    <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> Abrir
+                </button>
+                <input id="openFileID" type="file" onchange="openFile(event); this.value=null; return false;" style="display: none;" accept=".fjd">
                 <hr>
 
                 <label for="pencil">Polígono Regular</label>
@@ -44,6 +47,12 @@
                 <button id="apagar" type="button" class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Limpar Tudo
                 </button>
+                <hr>
+
+                <button id="pintar" type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Borda
+                </button>
+                <input id="cor" type="text" class="form-control" placeholder="Cor" value="#000000">
                 <hr>
 
                 <div class="btn-group btn-group-justified">
@@ -115,10 +124,10 @@
     var context = canvas.getContext('2d');
 
     startCanvas(canvas); // montando as grids
-
     //lista de poligonos
     var poligonos = [];
     var ponto = new Ponto();
+
 
     //globais
     var opcao = 1;
@@ -134,6 +143,27 @@
 
     var x_init;
     var y_init;
+
+    var openFile = function(event) {
+        var input = event.target;
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            var text = reader.result;
+
+            var clone = JSON.parse(text);
+//            console.log(clone[0]);
+            for (let i = 0; i < clone.length; i ++) {
+                poligonos.push(new Poligono(
+                    clone[i]._arestas, clone[i]._x_max, clone[i]._x_min, clone[i]._y_max, clone[i]._y_min, clone[i]._pontos
+                ));
+            }
+
+            reeiniciaTela(canvas, poligonos);
+
+        };
+        reader.readAsText(input.files[0]);
+    };
 
     canvas.addEventListener('click', ev_mouseclick, false);
 

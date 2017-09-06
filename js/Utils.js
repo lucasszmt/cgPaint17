@@ -42,11 +42,12 @@ function reeiniciaTela(canvas, poligonos) {
  * @param cor
  */
 function desenhaPoligono(poligono) {
+    // awuehuwaheuw
     context.strokeStyle = poligono.cor;
     context.beginPath();
-    context.moveTo(poligono.arestas[0].pontoA.x, poligono.arestas[0].pontoA.y);
+    context.moveTo(poligono._arestas[0]._pontoA._x, poligono._arestas[0]._pontoA._y);
     poligono.arestas.forEach(function (e) {
-        context.lineTo(e.pontoB.x, e.pontoB.y);
+        context.lineTo(e._pontoB._x, e._pontoB._y);
     });
     context.closePath();
     context.stroke();
@@ -72,7 +73,7 @@ function polRegular(lados, raio, centro) {
     // ja adicionando as coordenadas aos poligonos
     arestas.push(new Aresta(ponto_temp, dots[0])); // fechando o poligono
     aux_dots = extremos(dots);
-    poligonos.push(new Poligono(arestas, aux_dots[0], aux_dots[2], aux_dots[1], aux_dots[3], dots));
+    poligonos.push(new Poligono(arestas, aux_dots[0], aux_dots[2], aux_dots[1], aux_dots[3], dots, $('#cor').val()));
     arestas = [];
     console.log(dots);
     return dots;

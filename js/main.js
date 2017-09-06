@@ -7,7 +7,7 @@ function ev_mouseclick(ev) {
         case 1:
 
             //inicia o desenho livre
-            context.strokeStyle = "#000000";
+            context.strokeStyle = $('#cor').val();
 
             // Pegam a posição do mouse no elemento selecionado
             if (ev.layerX || ev.layerX == 0) { // Firefox
@@ -39,7 +39,7 @@ function ev_mouseclick(ev) {
 
         // aciona o método de desenho de poligonos regulares
         case 2:
-            context.strokeStyle = "#000000";
+            context.strokeStyle = $('#cor').val();
 
             if (ev.layerX || ev.layerX == 0) { // Firefox
                 x = ev.layerX;
@@ -124,14 +124,14 @@ function ev_mouseclick(ev) {
  */
 function translar(poligono, x_diff, y_diff) {
 
-    poligono.x_max += x_diff;
-    poligono.x_min += x_diff;
-    poligono.y_max += y_diff;
-    poligono.y_min += y_diff;
+    poligono._x_max += x_diff;
+    poligono._x_min += x_diff;
+    poligono._y_max += y_diff;
+    poligono._y_min += y_diff;
 
     // translando
-    poligono.arestas.forEach(function (e, index) {
-        poligono.arestas[index].addDiff(x_diff, y_diff);
+    poligono._arestas.forEach(function (e, index) {
+        poligono._arestas[index].addDiff(x_diff, y_diff);
     });
 
     reeiniciaTela(canvas, poligonos);
