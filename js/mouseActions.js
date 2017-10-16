@@ -6,8 +6,18 @@ function ev_mouseclick(ev) {
         // opção de desenho livre
         case 1:
 
+            // todo ver como arrumar isso, maximizar a tela antes de deixar pintar!
+            if (ev.target.id = 'canvas_frente') {
+                console.log(ev.target.id);
+            } else if (ev.target.id = 'canvas_topo') {
+                console.log(ev.target.id);
+
+            } else if (ev.target.id = 'canvas_lateral') {
+                console.log(ev.target.id);
+            }
+            // console.log(contexto);
             //inicia o desenho livre
-            context.strokeStyle = $('#cor').val();
+            contexto.strokeStyle = $('#cor').val();
 
             // Pegam a posição do mouse no elemento selecionado
             if (ev.layerX || ev.layerX == 0) { // Firefox
@@ -20,15 +30,15 @@ function ev_mouseclick(ev) {
 
             // se o desenho do poligono não foi iniciado
             if (!started) {
-                context.beginPath();
-                context.moveTo(x, y);
+                contexto.beginPath();
+                contexto.moveTo(x, y);
                 started = true;
                 closed = false;
                 ponto_temp = new Ponto(x, y);
                 pontos.push(new Ponto(x, y)); // lista geral de pontos
             } else {
-                context.lineTo(x, y);
-                context.stroke();
+                contexto.lineTo(x, y);
+                contexto.stroke();
 
                 pontos.push(new Ponto(x, y)); // lista geral de pontos
 

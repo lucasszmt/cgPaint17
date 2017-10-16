@@ -6,6 +6,8 @@ class Poligono {
         this._x_min = x_min;
         this._y_max = y_max;
         this._y_min = y_min;
+        this._z_min = z_min;
+        this._z_max = z_max;
         this._cor = cor;
         this._cor_de_fundo = '#FFFFFF';
         this._preenchido = false;

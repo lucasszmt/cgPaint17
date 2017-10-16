@@ -12,14 +12,6 @@ class Aresta {
         this._pontoA = value;
     }
 
-    set pontoAx(value) {
-        this._pontoA.x = value;
-    }
-
-    set pontoBx(value) {
-        this._pontoB.x = value;
-    }
-
     get pontoB() {
         return this._pontoB;
     }
@@ -33,12 +25,16 @@ class Aresta {
      *
      * @param x_diff
      * @param y_diff
+     * @param z_diff
      */
-    addDiff(x_diff, y_diff) {
+    addDiff(x_diff, y_diff, z_diff) {
         this.pontoA.x += x_diff;
         this.pontoA.y += y_diff;
+        this.pontoA.z += z_diff;
+
         this.pontoB.x += x_diff;
         this.pontoB.y += y_diff;
+        this.pontoB.z += z_diff;
     }
 
     /**
@@ -46,15 +42,20 @@ class Aresta {
      *
      * @param S_x
      * @param S_y
+     * @param S_z
      */
-    multPontos(S_x, S_y) {
+    multPontos(S_x, S_y, S_z) {
         this.pontoA.x *= S_x;
         this.pontoA.y *= S_y;
+        this.pontoA.z *= S_z;
+
         this.pontoB.x *= S_x;
         this.pontoB.y *= S_y;
+        this.pontoB.z *= S_z;
     }
 
-    rotacionarPontos(theta) {
+    // todo refazer
+    rotacionarPontosOld(theta) {
         let aux = [];
 
         let x_l = (this.pontoA.x * Math.cos(theta)) - (this.pontoA.y * Math.sin(theta));

@@ -1,7 +1,8 @@
 class Ponto {
-    constructor(x, y) {
+    constructor(x, y, z) {
         this._x = x;
         this._y = y;
+        this._z = z;
     }
 
     get x() {
@@ -18,5 +19,13 @@ class Ponto {
 
     set y(value) {
         this._y = value;
+    }
+
+    get z() {
+        return this._z;
+    }
+
+    set z(value) {
+        this._z = value;
     }
 }

@@ -2,7 +2,7 @@
  * Desenha a tela inicial
  * @param canvas
  */
-function startCanvas(canvas) {
+function startCanvas(canvas, context) {
 
     canvas.lineWidth = 0.1;
     context.beginPath();
@@ -29,10 +29,9 @@ function reeiniciaTela(canvas, poligonos) {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
     startCanvas(canvas);
-    poligonos.forEach(function (e) {
-        desenhaPoligono(e);
-    });
-
+    // poligonos.forEach(function (e) {
+    //     desenhaPoligono(e);
+    // });
 }
 
 /**
