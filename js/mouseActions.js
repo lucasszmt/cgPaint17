@@ -6,16 +6,17 @@ function ev_mouseclick(ev) {
         // opção de desenho livre
         case 1:
 
-            // todo ver como arrumar isso, maximizar a tela antes de deixar pintar!
-            if (ev.target.id = 'canvas_frente') {
-                console.log(ev.target.id);
-            } else if (ev.target.id = 'canvas_topo') {
-                console.log(ev.target.id);
+            let contexto = NaN;
 
-            } else if (ev.target.id = 'canvas_lateral') {
-                console.log(ev.target.id);
+            // todo ver como arrumar isso, maximizar a tela antes de deixar pintar!
+            if (ev.target.id == 'canvas_frente') {
+                contexto = context;
+            } else if (ev.target.id == 'canvas_topo') {
+                contexto = context2;
+            } else if (ev.target.id == 'canvas_lateral') {
+                contexto = context3;
             }
-            // console.log(contexto);
+
             //inicia o desenho livre
             contexto.strokeStyle = $('#cor').val();
 
