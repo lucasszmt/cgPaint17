@@ -41,7 +41,6 @@ function reeiniciaTela(canvas, poligonos) {
  * @param cor
  */
 function desenhaPoligono(poligono) {
-    // awuehuwaheuw
     context.strokeStyle = poligono.cor;
     context.beginPath();
     context.moveTo(poligono._arestas[0]._pontoA._x, poligono._arestas[0]._pontoA._y);

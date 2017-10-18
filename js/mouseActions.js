@@ -35,17 +35,39 @@ function ev_mouseclick(ev) {
                 contexto.moveTo(x, y);
                 started = true;
                 closed = false;
-                ponto_temp = new Ponto(x, y);
-                pontos.push(new Ponto(x, y)); // lista geral de pontos
+
+                // verificando qual view está selecionada para salvar os pontos corretamente
+                if (view_selecionada == 1) {
+                    ponto_temp = new Ponto(x, y, 1);
+                    pontos.push(new Ponto(x, y, 1)); // lista geral de pontos
+                } else if (view_selecionada == 2) {
+                    ponto_temp = new Ponto(x, 1, y);
+                    pontos.push(new Ponto(x, 1, y)); // lista geral de pontos
+                } else if (view_selecionada == 3) {
+                    ponto_temp = new Ponto(x, y, 1);
+                    pontos.push(new Ponto(x, y, 1)); // lista geral de pontos
+                }
+
             } else {
                 contexto.lineTo(x, y);
                 contexto.stroke();
 
-                pontos.push(new Ponto(x, y)); // lista geral de pontos
+                let aux = NaN;
 
-                arestas.push(new Aresta(ponto_temp, new Ponto(x, y)));
-                ponto_temp = new Ponto(x, y);
-            }
+                if (view_selecionada == 1) {
+                    aux = new Ponto(x, y, 1);
+                    pontos.push(aux); // lista geral de pontos
+                } else if (view_selecionada == 2) {
+                    aux = new Ponto(x, 1, y);
+                    pontos.push(aux); // lista geral de pontos
+                } else if (view_selecionada == 3) {
+                    aux = new Ponto(x, y, 1);
+                    pontos.push(aux); // lista geral de pontos
+                }
+
+                arestas.push(new Aresta(ponto_temp, aux));
+                ponto_temp = aux;
+            } // todo fechar o método de fechar desenho auwehuwahewa
             break;
 
         // aciona o método de desenho de poligonos regulares

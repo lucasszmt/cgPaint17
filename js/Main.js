@@ -30,7 +30,7 @@ var started = false;
 var closed = true;
 var selecionado = false;
 //
-var view_selecionada = 0
+var view_selecionada = 0;
 var selecionado_index;
 
 var movendo = false;
@@ -123,6 +123,7 @@ function mudaView() {
             canvasFrente.width = 600;
             canvasFrente.height = 600;
             startCanvas(canvasFrente, context);
+            view_selecionada = 1;
             break;
 
         case '2':
@@ -134,6 +135,7 @@ function mudaView() {
             canvasTopo.width = 600;
             canvasTopo.height = 600;
             startCanvas(canvasTopo, context2);
+            view_selecionada = 2;
             break;
 
         case '3':
@@ -145,6 +147,7 @@ function mudaView() {
             canvasLateral.width = 600;
             canvasLateral.height = 600;
             startCanvas(canvasLateral, context3);
+            view_selecionada = 3;
             break;
 
         case '4':
@@ -156,6 +159,7 @@ function mudaView() {
             canvasPerspectiva.width = 600;
             canvasPerspectiva.height = 600;
             startCanvas(canvasPerspectiva, context4);
+            view_selecionada = 4;
             break;
 
         case '0':
@@ -175,6 +179,9 @@ function mudaView() {
 
             canvasPerspectiva.width = 400;
             canvasPerspectiva.height = 300;
+
+            view_selecionada = 0;
+
             break;
     }
 }

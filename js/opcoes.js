@@ -3,7 +3,7 @@ $('#pencil').click(function () {
     opcao = 1;
 });
 
-//fecha o desenho
+//fecha o desenho todo atualizar aqui o x, y, z
 $('#close_pencil').click(function () {
     if (pontos.length >= 3) {
         // context.lineTo(pontos[0].x, pontos[0].y);
