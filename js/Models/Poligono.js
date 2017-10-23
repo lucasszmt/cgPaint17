@@ -1,6 +1,6 @@
 class Poligono {
 
-    constructor(arestas, x_max, x_min, y_max, y_min, pontos, cor) {
+    constructor(arestas, x_max, x_min, y_max, y_min, z_min, z_max, pontos, cor) {
         this._arestas = arestas;
         this._x_max = x_max;
         this._x_min = x_min;
@@ -52,6 +52,22 @@ class Poligono {
 
     set y_min(value) {
         this._y_min = value;
+    }
+
+    get z_min() {
+        return this._z_min;
+    }
+
+    set z_min(value) {
+        this._z_min = value;
+    }
+
+    get z_max() {
+        return this._z_max;
+    }
+
+    set z_max(value) {
+        this._z_max = value;
     }
 
     get cor() {

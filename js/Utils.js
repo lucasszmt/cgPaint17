@@ -24,14 +24,15 @@ function startCanvas(canvas, context) {
 /**
  * Reepinta a tela do canvas
  * @param canvas
+ * todo refazer o metodo
  */
 function reeiniciaTela(canvas, poligonos) {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
     startCanvas(canvas);
-    // poligonos.forEach(function (e) {
-    //     desenhaPoligono(e);
-    // });
+    poligonos.forEach(function (e) {
+        desenhaPoligono(e);
+    });
 }
 
 /**
@@ -84,7 +85,8 @@ function polRegular(lados, raio, centro) {
 function extremos(pontos) {
 
     let max_x = Number.NEGATIVE_INFINITY, max_y = Number.NEGATIVE_INFINITY,
-        min_x = Number.POSITIVE_INFINITY, min_y = Number.POSITIVE_INFINITY;
+        min_x = Number.POSITIVE_INFINITY, min_y = Number.POSITIVE_INFINITY,
+        min_z = Number.POSITIVE_INFINITY, max_z = Number.NEGATIVE_INFINITY;
 
     pontos.forEach(function (element) {
         if (element.x > max_x)
@@ -98,9 +100,15 @@ function extremos(pontos) {
 
         if (element.y < min_y)
             min_y = element.y;
+
+        if (element.z > max_z)
+            max_z = element.z;
+
+        if (element.z < min_z)
+            min_z = element.z;
     });
 
-    return [max_x, max_y, min_x, min_y];
+    return [max_x, max_y, min_x, min_y, max_z, min_z];
 }
 
 function atualizaExtremos(poligono) {

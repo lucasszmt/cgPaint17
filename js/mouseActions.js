@@ -8,13 +8,14 @@ function ev_mouseclick(ev) {
 
             let contexto = NaN;
 
-            // todo ver como arrumar isso, maximizar a tela antes de deixar pintar!
-            if (ev.target.id == 'canvas_frente') {
+            if (ev.target.id == 'canvas_frente' && view_selecionada == 1) {
                 contexto = context;
-            } else if (ev.target.id == 'canvas_topo') {
+            } else if (ev.target.id == 'canvas_topo' && view_selecionada == 2) {
                 contexto = context2;
-            } else if (ev.target.id == 'canvas_lateral') {
+            } else if (ev.target.id == 'canvas_lateral' && view_selecionada == 3) {
                 contexto = context3;
+            } else {
+                break;
             }
 
             //inicia o desenho livre
@@ -44,30 +45,31 @@ function ev_mouseclick(ev) {
                     ponto_temp = new Ponto(x, 1, y);
                     pontos.push(new Ponto(x, 1, y)); // lista geral de pontos
                 } else if (view_selecionada == 3) {
-                    ponto_temp = new Ponto(x, y, 1);
-                    pontos.push(new Ponto(x, y, 1)); // lista geral de pontos
+                    ponto_temp = new Ponto(1, y, x);
+                    pontos.push(new Ponto(1, y, x)); // lista geral de pontos
                 }
-
             } else {
+
                 contexto.lineTo(x, y);
                 contexto.stroke();
-
                 let aux = NaN;
 
                 if (view_selecionada == 1) {
+
                     aux = new Ponto(x, y, 1);
                     pontos.push(aux); // lista geral de pontos
                 } else if (view_selecionada == 2) {
                     aux = new Ponto(x, 1, y);
                     pontos.push(aux); // lista geral de pontos
                 } else if (view_selecionada == 3) {
-                    aux = new Ponto(x, y, 1);
+                    aux = new Ponto(1, y, x);
                     pontos.push(aux); // lista geral de pontos
                 }
-
                 arestas.push(new Aresta(ponto_temp, aux));
+
                 ponto_temp = aux;
-            } // todo fechar o método de fechar desenho auwehuwahewa
+                console.log(pontos);
+            }
             break;
 
         // aciona o método de desenho de poligonos regulares

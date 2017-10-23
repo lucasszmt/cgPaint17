@@ -3,12 +3,22 @@ $('#pencil').click(function () {
     opcao = 1;
 });
 
-//fecha o desenho todo atualizar aqui o x, y, z
+//fecha o desenho
 $('#close_pencil').click(function () {
     if (pontos.length >= 3) {
-        // context.lineTo(pontos[0].x, pontos[0].y);
-        context.closePath();
-        context.stroke();
+
+        let contexto = NaN;
+
+        if (view_selecionada == 1) {
+            contexto = context;
+        } else if (view_selecionada == 2) {
+            contexto = context2;
+        } else if (view_selecionada == 3) {
+            contexto = context3;
+        }
+
+        contexto.closePath();
+        contexto.stroke();
         arestas.push(new Aresta(ponto_temp, pontos[0]));
         started = false;
         closed = true;
@@ -17,7 +27,8 @@ $('#close_pencil').click(function () {
         //adicionando a ultima aresta, a de retorno
         let extremos_pol = extremos(pontos);
         poligonos.push(new Poligono(arestas, extremos_pol[0], extremos_pol[2],
-            extremos_pol[1], extremos_pol[3], pontos, $('#cor').val())); // cria um novo poligono
+            extremos_pol[1], extremos_pol[3], extremos_pol[4], extremos_pol[5],
+            pontos, $('#cor').val())); // cria um novo poligono
         // limpa os pontos e arestas
         pontos = [];
         arestas = [];

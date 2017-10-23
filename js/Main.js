@@ -65,10 +65,10 @@ canvasTopo.addEventListener('click', ev_mouseclick, false);
 canvasLateral.addEventListener('click', ev_mouseclick, false);
 
 // só pra verificar as coordenadas!
-canvas.addEventListener('auxclick', function (ev) {
-    console.log(ev.offsetX, ev.offsetY);
-    p = new Ponto(ev.offsetX, ev.offsetY);
-}, false);
+// canvas.addEventListener('auxclick', function (ev) {
+//     console.log(ev.offsetX, ev.offsetY);
+//     p = new Ponto(ev.offsetX, ev.offsetY);
+// }, false);
 
 canvas.addEventListener('mousedown', function(e) {
     movendo = true;
