@@ -16,8 +16,17 @@ startCanvas(canvasTopo, context2);
 startCanvas(canvasLateral, context3); // montando as grids
 startCanvas(canvasPerspectiva, context4);
 
+
 //lista de poligonos
 var poligonos = [];
+
+var poligonos3D = [];
+criarPoligonoFoda();
+desenhaPoligono();
+
+//clonar poligonos 3D
+console.log(poligonos3D);
+
 var ponto = new Ponto();
 
 //globais
@@ -25,7 +34,7 @@ var opcao = 1;
 
 var pontos = []; // para manter uma lista de pontos por precaução
 var ponto_temp;
-var arestas = [];
+
 var started = false;
 var closed = true;
 var selecionado = false;
@@ -60,9 +69,9 @@ var openFile = function(event) {
 };
 
 // adicionando os eventos para os canvas
-canvasFrente.addEventListener('click', ev_mouseclick, false);
-canvasTopo.addEventListener('click', ev_mouseclick, false);
-canvasLateral.addEventListener('click', ev_mouseclick, false);
+canvasFrente.addEventListener('click', ev_mouseclick1, false);
+canvasTopo.addEventListener('click', ev_mouseclick2, false);
+canvasLateral.addEventListener('click', ev_mouseclick1, false);
 
 // só pra verificar as coordenadas!
 // canvas.addEventListener('auxclick', function (ev) {
@@ -70,39 +79,39 @@ canvasLateral.addEventListener('click', ev_mouseclick, false);
 //     p = new Ponto(ev.offsetX, ev.offsetY);
 // }, false);
 
-canvas.addEventListener('mousedown', function(e) {
-    movendo = true;
-    x_init = e.offsetX;
-    y_init = e.offsetY;
-
-//        canvas.addEventListener('mousemove', function(e) {
-//            if (movendo) {
-////                console.log(e.offsetX + " " + e.offsetY)
-//            }
+//canvas.addEventListener('mousedown', function(e) {
+//    movendo = true;
+//    x_init = e.offsetX;
+//    y_init = e.offsetY;
 //
-//            if (opcao == 4) {
-//                let x_diff = e.layerX - x_init;
-//                let y_diff = e.layerY - y_init;
+////        canvas.addEventListener('mousemove', function(e) {
+////            if (movendo) {
+//////                console.log(e.offsetX + " " + e.offsetY)
+////            }
+////
+////            if (opcao == 4) {
+////                let x_diff = e.layerX - x_init;
+////                let y_diff = e.layerY - y_init;
+////
+////            console.log(x_diff + ' ' +  y_diff);
+//////                translar(poligonos[selecionado_index], x_diff, y_diff);
+////            }
+////        });
+//}, false);
+
+
+
+//canvas.addEventListener('mouseup', function (ev) {
 //
-//            console.log(x_diff + ' ' +  y_diff);
-////                translar(poligonos[selecionado_index], x_diff, y_diff);
-//            }
-//        });
-}, false);
-
-
-
-canvas.addEventListener('mouseup', function (ev) {
-
-    movendo = false;
-    if (opcao == 4) {
-        let x_diff = ev.layerX - x_init;
-        let y_diff = ev.layerY - y_init;
-
-//            console.log(x_diff + ' ' +  y_diff);
-        translar(poligonos[selecionado_index], x_diff, y_diff);
-    }
-});
+//    movendo = false;
+//    if (opcao == 4) {
+//        let x_diff = ev.layerX - x_init;
+//        let y_diff = ev.layerY - y_init;
+//
+////            console.log(x_diff + ' ' +  y_diff);
+//        translar(poligonos[selecionado_index], x_diff, y_diff);
+//    }
+//});
 
 
 /**
@@ -123,6 +132,7 @@ function mudaView() {
             canvasFrente.width = 600;
             canvasFrente.height = 600;
             startCanvas(canvasFrente, context);
+            reeiniciaTela();
             view_selecionada = 1;
             break;
 
@@ -135,6 +145,7 @@ function mudaView() {
             canvasTopo.width = 600;
             canvasTopo.height = 600;
             startCanvas(canvasTopo, context2);
+            reeiniciaTela();
             view_selecionada = 2;
             break;
 
@@ -147,6 +158,7 @@ function mudaView() {
             canvasLateral.width = 600;
             canvasLateral.height = 600;
             startCanvas(canvasLateral, context3);
+            reeiniciaTela();
             view_selecionada = 3;
             break;
 
@@ -159,6 +171,7 @@ function mudaView() {
             canvasPerspectiva.width = 600;
             canvasPerspectiva.height = 600;
             startCanvas(canvasPerspectiva, context4);
+            reeiniciaTela();
             view_selecionada = 4;
             break;
 
@@ -168,19 +181,21 @@ function mudaView() {
             canvasTopo.style.display = 'inline';
             canvasPerspectiva.style.display = 'inline';
 
-            canvasTopo.width = 400;
-            canvasTopo.height = 300;
-
-            canvasFrente.width = 400;
-            canvasFrente.height = 300;
-
-            canvasLateral.width = 400;
-            canvasLateral.height = 300;
-
-            canvasPerspectiva.width = 400;
-            canvasPerspectiva.height = 300;
+            //canvasTopo.width = 400;
+            //canvasTopo.height = 300;
+            //
+            //canvasFrente.width = 400;
+            //canvasFrente.height = 300;
+            //
+            //canvasLateral.width = 400;
+            //canvasLateral.height = 300;
+            //
+            //canvasPerspectiva.width = 400;
+            //canvasPerspectiva.height = 300;
 
             view_selecionada = 0;
+
+            reeiniciaTela();
 
             break;
     }

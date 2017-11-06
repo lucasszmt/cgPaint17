@@ -1,3 +1,26 @@
+$('#vrp_x').click(function () {
+    desenhaPoligono();
+});
+$('#vrp_y').click(function () {
+    desenhaPoligono();
+});
+$('#vrp_z').click(function () {
+    desenhaPoligono();
+});
+
+$('#p_x').click(function () {
+    desenhaPoligono();
+});
+$('#p_y').click(function () {
+    desenhaPoligono();
+});
+$('#p_z').click(function () {
+    desenhaPoligono();
+});
+$('#distancia').click(function () {
+    desenhaPoligono();
+});
+
 //opções selecionadas
 $('#pencil').click(function () {
     opcao = 1;

@@ -1,17 +1,10 @@
 class Poligono {
 
-    constructor(arestas, x_max, x_min, y_max, y_min, z_min, z_max, pontos, cor) {
+    constructor(arestas, vertices, faces, cor) {
         this._arestas = arestas;
-        this._x_max = x_max;
-        this._x_min = x_min;
-        this._y_max = y_max;
-        this._y_min = y_min;
-        this._z_min = z_min;
-        this._z_max = z_max;
+        this._vertices = vertices;
+        this._faces = faces;
         this._cor = cor;
-        this._cor_de_fundo = '#FFFFFF';
-        this._preenchido = false;
-        this._pontos = pontos;
     }
 
     get arestas() {
@@ -22,52 +15,20 @@ class Poligono {
         this._arestas = value;
     }
 
-    get x_max() {
-        return this._x_max;
+    get vertices() {
+        return this._vertices;
     }
 
-    set x_max(value) {
-        this._x_max = value;
+    set vertices(value) {
+        this._vertices = value;
     }
 
-    get x_min() {
-        return this._x_min;
+    get faces() {
+        return this._faces;
     }
 
-    set x_min(value) {
-        this._x_min = value;
-    }
-
-    get y_max() {
-        return this._y_max;
-    }
-
-    set y_max(value) {
-        this._y_max = value;
-    }
-
-    get y_min() {
-        return this._y_min;
-    }
-
-    set y_min(value) {
-        this._y_min = value;
-    }
-
-    get z_min() {
-        return this._z_min;
-    }
-
-    set z_min(value) {
-        this._z_min = value;
-    }
-
-    get z_max() {
-        return this._z_max;
-    }
-
-    set z_max(value) {
-        this._z_max = value;
+    set faces(value) {
+        this._faces = value;
     }
 
     get cor() {
@@ -78,27 +39,6 @@ class Poligono {
         this._cor = value;
     }
 
-    get cor_de_fundo() {
-        return this._cor_de_fundo;
-    }
-
-    set cor_de_fundo(value) {
-        this._cor_de_fundo = value;
-    }
-
-    get preenchido() {
-        return this._preenchido;
-    }
-
-    set preenchido(value) {
-        this._preenchido = value;
-    }
-
-    get pontos() {
-        return this._pontos;
-    }
-
-    set pontos(value) {
-        this._pontos = value;
-    }
 }
+
+

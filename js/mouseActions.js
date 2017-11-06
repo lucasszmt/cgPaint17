@@ -1,5 +1,5 @@
 // Pega as ações do mouse
-function ev_mouseclick(ev) {
+function ev_mouseclick1(ev) {
     var x, y;
     switch (opcao) {
 
@@ -74,6 +74,7 @@ function ev_mouseclick(ev) {
 
         // aciona o método de desenho de poligonos regulares
         case 2:
+
             context.strokeStyle = $('#cor').val();
 
             if (ev.layerX || ev.layerX == 0) { // Firefox
@@ -87,30 +88,13 @@ function ev_mouseclick(ev) {
             // verifica se os campos estão preenchidos
             let raio = $('#radius').val();
             let lados = $('#sides').val();
-            if ($('#radius').val() && $('#sides').val()) {
-                pontos = polRegular(lados, raio, new Ponto(x, y));
 
-                pontos.forEach(function (element) {
-                    if (!started) {
-                        // console.log(element.x + ' ' + element.y);
-                        context.beginPath();
-                        context.moveTo(element.x, element.y);
-                        started = true;
-                    } else {
-                        // console.log(element.x + ' ' + element.y);
-                        context.lineTo(element.x, element.y);
-                        context.stroke();
-                    }
-                });
-                context.closePath();
-                context.stroke();
-                started = false;
-            } else if (lados < 3) {
-                alert("O número de lados deve ser maior ou igual a 3");
-            }
-            else {
-                alert("Preencha os campos abaixo");
-            }
+            pol = criarPoligono2D(lados, raio, new Ponto(x, y, 0), '1');
+
+            poligonos.push(pol);
+
+            reeiniciaTela();
+
             break;
 
         // seleção de poligonos
@@ -149,6 +133,139 @@ function ev_mouseclick(ev) {
 
 }
 
+function ev_mouseclick2(ev) {
+    var x, y;
+    switch (opcao) {
+
+        // opção de desenho livre
+        case 1:
+
+            let contexto = NaN;
+
+            if (ev.target.id == 'canvas_frente' && view_selecionada == 1) {
+                contexto = context;
+            } else if (ev.target.id == 'canvas_topo' && view_selecionada == 2) {
+                contexto = context2;
+            } else if (ev.target.id == 'canvas_lateral' && view_selecionada == 3) {
+                contexto = context3;
+            } else {
+                break;
+            }
+
+            //inicia o desenho livre
+            contexto.strokeStyle = $('#cor').val();
+
+            // Pegam a posição do mouse no elemento selecionado
+            if (ev.layerX || ev.layerX == 0) { // Firefox
+                x = ev.layerX;
+                y = ev.layerY;
+            } else if (ev.offsetX || ev.offsetX == 0) { // Opera - Chrome
+                x = ev.offsetX;
+                y = ev.offsetY;
+            }
+
+            // se o desenho do poligono não foi iniciado
+            if (!started) {
+                contexto.beginPath();
+                contexto.moveTo(x, y);
+                started = true;
+                closed = false;
+
+                // verificando qual view está selecionada para salvar os pontos corretamente
+                if (view_selecionada == 1) {
+                    ponto_temp = new Ponto(x, y, 1);
+                    pontos.push(new Ponto(x, y, 1)); // lista geral de pontos
+                } else if (view_selecionada == 2) {
+                    ponto_temp = new Ponto(x, 1, y);
+                    pontos.push(new Ponto(x, 1, y)); // lista geral de pontos
+                } else if (view_selecionada == 3) {
+                    ponto_temp = new Ponto(1, y, x);
+                    pontos.push(new Ponto(1, y, x)); // lista geral de pontos
+                }
+            } else {
+
+                contexto.lineTo(x, y);
+                contexto.stroke();
+                let aux = NaN;
+
+                if (view_selecionada == 1) {
+
+                    aux = new Ponto(x, y, 1);
+                    pontos.push(aux); // lista geral de pontos
+                } else if (view_selecionada == 2) {
+                    aux = new Ponto(x, 1, y);
+                    pontos.push(aux); // lista geral de pontos
+                } else if (view_selecionada == 3) {
+                    aux = new Ponto(1, y, x);
+                    pontos.push(aux); // lista geral de pontos
+                }
+                arestas.push(new Aresta(ponto_temp, aux));
+
+                ponto_temp = aux;
+                console.log(pontos);
+            }
+            break;
+
+        // aciona o método de desenho de poligonos regulares
+        case 2:
+
+            context2.strokeStyle = $('#cor').val();
+
+            if (ev.layerX || ev.layerX == 0) { // Firefox
+                x = ev.layerX;
+                y = ev.layerY;
+            } else if (ev.offsetX || ev.offsetX == 0) { // Opera - Chrome
+                x = ev.offsetX;
+                y = ev.offsetY;
+            }
+
+            // verifica se os campos estão preenchidos
+            let raio = $('#radius').val();
+            let lados = $('#sides').val();
+
+            pol = criarPoligono2D(lados, raio, new Ponto(x, y, 0), '2');
+
+            poligonos.push(pol);
+
+            reeiniciaTela();
+
+            break;
+
+        // seleção de poligonos
+        case 3:
+
+            if (ev.layerX || ev.layerX == 0) { // Firefox
+                x = ev.layerX;
+                y = ev.layerY;
+            } else if (ev.offsetX || ev.offsetX == 0) { // Opera - Chrome
+                x = ev.offsetX;
+                y = ev.offsetY;
+            }
+
+            ponto = new Ponto(x, y);
+
+            // irá percorrer os poligonos de tras pra frente, por questão de prioridade
+            for (let i = poligonos.length - 1; i >= 0; i--) {
+                if (verificaPontoRect(ponto, poligonos[i])) {
+                    reeiniciaTela(canvas, poligonos);
+                    selecionado_index = i;
+                    console.log(selecionado_index);
+
+                    selecionado = true;
+                    //desenhando caixa de seleção do poligono
+                    drawSelectionRect(poligonos, i);
+                    break;
+                } else {
+                    reeiniciaTela(canvas, poligonos);
+                    console.log('false');
+                    selecionado_index = -1;
+                    selecionado = false;
+                }
+            }
+            break;
+    }
+
+}
 
 /**
  * Calcula diferença arrastada com o mouse e transalada o poligono
