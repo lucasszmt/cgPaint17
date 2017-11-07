@@ -39,6 +39,28 @@ class Poligono {
         this._cor = value;
     }
 
+    get centroide(){
+        var x = 0;
+        var y = 0;
+        var z = 0;
+
+        var count = 0;
+
+        this._vertices.forEach(function (vertice) {
+            x = x + vertice.x;
+            y = y + vertice.y;
+            z = z + vertice.z;
+
+            count++;
+        });
+
+        x = x / count;
+        y = y / count;
+        z = z / count;
+
+        return new Ponto(x, y, z);
+    }
+
 }
 
 

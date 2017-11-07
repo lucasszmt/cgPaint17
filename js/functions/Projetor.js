@@ -1,12 +1,16 @@
 
     //MODELO DE CAMERA ALVY RAY SMITH
 
+    var windowVAR = [0, 0, 10, 5]; //(cu, cv) = centro da window su = 1/2 largura da window sv = 1/2 altura da window
+    var far = 130; //Zmax
+    var near = 70; //Zmin
+
     function camera(vrp, ponto) {
 
         var auxP = [ponto[0], ponto[1], ponto[2]];
         var  auxVRP = [vrp[0], vrp[1], vrp[2]];
 
-        n = calcula_n(auxP, auxVRP);
+        n = calcula_n(auxVRP, auxP);
         v = calcula_v(n);
         u = calcula_u(n, v);
 
@@ -27,22 +31,36 @@
 
     function recorte (distancia) {
 
-        var window = [0, 0, 10, 5]; //(cu, cv) = centro da window su = 1/2 largura da window sv = 1/2 altura da window
-        var far = 130; //Zmax
-
         //Faz um cisalhamento para alinhar o centro da imagem com o eixo z. Necessário porque a janela de imagem pode não estar centralizada.
-        var D = [[1, 0, -window[0] / distancia, 0],
-                [0, 1, -window[1] / distancia, 0],
+        var D = [[1, 0, -windowVAR[0] / distancia, 0],
+                [0, 1, -windowVAR[1] / distancia, 0],
                 [0, 0, 1, 0],
                 [0, 0, 0, 1]];
 
         //Faz um escalonamento tal que a base da pirâmide de visão seja mapeada o quadrado unitário sobre o plano z = 1
-        var E = [[distancia / (window[2] * far), 0, 0, 0],
-                [0, distancia / (window[3] * far), 0, 0],
+        var E = [[distancia / (windowVAR[2] * far), 0, 0, 0],
+                [0, distancia / (windowVAR[3] * far), 0, 0],
                 [0, 0, 1 / far, 0],
                 [0, 0, 0, 1]];
 
         return multiplicaMatriz(E, D);
+    }
+
+    function ortografica () {
+
+        var Fo = [[1, 0, 0, 0], //Translada zmin para a origem
+                [0, 1, 0, 0],
+                [0, 0, 1, -near],
+                [0, 0, 0, 1]];
+
+        var Go = [[0.1, 0, 0, 0], //Escala o volume canônico em z para que o plano traseiro coincida com o plano z = 1
+                [0, 0.2, 0, 0],
+                [0, 0, 1/(far - near), 0],
+                [0, 0, 0, 1]];
+
+        O = multiplicaMatriz(Fo, Go);
+
+        return O;
     }
 
     function perspectiva () {
@@ -90,12 +108,11 @@
 
     function dispositivo () {
 
-        var viewPort = [0, 0, 110, 20]; //Tamanho da tela
+        var viewPort = [0, 0, 100, 100]; //Tamanho da tela
         var Dx = 400; //Xmax - Xmin da viewport
-        var Dy = 300; //Ymax - Ymin da viewport
+        var Dy = 400; //Ymax - Ymin da viewport
         var Dz = 60; //far - near
         //distancia entre o observador e os planos de recorte frontal e traseiro
-        var near = 70; //Zmin
 
 
         //Translada o volume de visão canônico de forma que o vértice (-1 -1 0 1) vá para a origem e aplica um fator de escala de 0,5 em x e y
@@ -121,12 +138,17 @@
         return multiplicaMatriz(M, S);
     }
 
-    function sruTOsrt (S, P, C, V) {
+    function sruTOsrt (S, P, C, V, O, op) {
 
-        var aux1 = multiplicaMatriz(C, V);
-        var aux2 = multiplicaMatriz(S, P);
-
-        return multiplicaMatriz(aux2, aux1);
+        if(op == 0){
+            var aux1 = multiplicaMatriz(C, V);
+            var aux2 = multiplicaMatriz(S, P);
+            return multiplicaMatriz(aux2, aux1);
+        }else{
+            var aux1 = multiplicaMatriz(O, V);
+            var aux2 = multiplicaMatriz(S, aux1);
+            return aux2;
+        }
     }
 
     function convert3Dto2D(vrp, ponto, distancia) {
@@ -144,18 +166,14 @@
         //Transformacao perspectiva
         //Faz a projeção perspectiva levando o VRP para o infinito. A projeção passa a ser uma projeção paralela ortográfica ao ignorar a coordenada z
         var P = perspectiva();
+        var O = ortografica();
         //M*L*K = Realiza o mapeamento do volume canônico para coordenadas da viewport
         //Trnasformacao do Dispositivo
         var S = dispositivo();
         //Concatenacao Final
         //S*P*C*V = Faz o mapeamento em perspectiva das coordenadas do objeto de SRU para SRT
 
-        var TP = sruTOsrt(S, P, C, V);
-
-        //var poligonos2D = Object.assign([], poligonos3D);
-        // var poligonos2D = JSON.parse(JSON.stringify(poligonos3D));
-
-        //console.log(poligonos2D);
+        var TP = sruTOsrt(S, P, C, V, O, 0);//0 = Perspectiva  1 = Ortografica
 
         var poligonos2D = [];
         poligonos3D.forEach(function (poligono) {

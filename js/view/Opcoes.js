@@ -1,25 +1,41 @@
-$('#vrp_x').click(function () {
+//opções selecionadas
+$('#desenha-poligono-regular').click(function () {
+    var lados = $('#lados').val();
+    var raio = $('#raio').val();
+
+    var centro = new Ponto(width_default/2, height_default/2, 0);
+
+    criarPoligono(lados, raio, centro);
     desenhaPoligono();
-});
-$('#vrp_y').click(function () {
-    desenhaPoligono();
-});
-$('#vrp_z').click(function () {
-    desenhaPoligono();
+
+    $('#lados').val('');
+    $('#raio').val('');
 });
 
-$('#p_x').click(function () {
-    desenhaPoligono();
+$("#opt-select").change(function() {
+    if(this.checked) {
+        tool = 'select';
+    }
 });
-$('#p_y').click(function () {
-    desenhaPoligono();
+
+$("#opt-move").change(function() {
+    if(this.checked) {
+        tool = 'move';
+    }
 });
-$('#p_z').click(function () {
-    desenhaPoligono();
+
+$("#opt-rotation").change(function() {
+    if(this.checked) {
+        tool = 'rotation';
+    }
 });
-$('#distancia').click(function () {
-    desenhaPoligono();
+
+$("#opt-resize").change(function() {
+    if(this.checked) {
+        tool = 'resize';
+    }
 });
+
 
 //opções selecionadas
 $('#pencil').click(function () {

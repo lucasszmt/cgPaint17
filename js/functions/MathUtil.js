@@ -22,6 +22,7 @@ function calcula_v(n) {
 
     var Y = [0, 0, -1];
     var Y1 = scale(n, dot(Y, n));
+
     var V = subVetor(Y, Y1);
 
     // Normaliza V
@@ -79,10 +80,21 @@ function normaVetor(a){
     for (let i = 0; i < 3; i++) {
         N += Math.pow(a[i], 2);
     }
+
     N = Math.sqrt(N);
 
     for (let i = 0; i < 3; i++) {
         result[i] = a[i]/N;
+    }
+
+    if(isNaN(result[0])){
+        result[0] = 0;
+    }
+    if(isNaN(result[1])){
+        result[1] = 0;
+    }
+    if(isNaN(result[2])){
+        result[2] = 0;
     }
 
     return result;

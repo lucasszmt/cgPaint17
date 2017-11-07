@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="" lang="">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -12,150 +12,125 @@
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/Vendor/bootstrap-3.3.7-dist/bootstrap.min.css">
-    <link rel="stylesheet" href="css/Vendor/bootstrap-3.3.7-dist/bootstrap-theme.css">
+    <link rel="stylesheet" href="css/Vendor/bootstrap-4/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Vendor/fonts/font-awesome.min.css">
 </head>
 <body>
 
-<div class="container-fluid menu">
+<!-- MENU SUPERIOR -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Vaio 3D</a>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="#">Arquivo</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Sobre</a>
+        </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container" style="max-width: 100%;">
     <div class="row">
-        <div class="col-md-2">
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
 
-            <div class="form-group">
-                <label for="visao">Visao</label><br>
-                <select name="visao" id="visao" class="form-control" onchange="mudaView()">
-                    <option value="0">Geral</option>
-                    <option value="1">Frente</option>
-                    <option value="2">Topo</option>
-                    <option value="3">Lateral</option>
-                    <option value="4">Perspectiva</option>
-                </select>
-            </div>
-
-            <div class="btn-group-vertical" role="group" aria-label="...">
-                <label for="pencil">Desenho Livre</label>
-                <button id="pencil" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Desenhar
-                </button>
-                <button id="close_pencil" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Fechar Desenho
-                </button>
-                <button id="save" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Salvar
-                </button>
-                <button id="open" type="button" class="btn btn-default btn-sm" onclick="document.getElementById('openFileID').click(); return false;">
-                    <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> Abrir
-                </button>
-                <input id="openFileID" type="file" onchange="openFile(event); this.value=null; return false;" style="display: none;" accept=".fjd">
-                <hr>
-
-                <label for="pencil">VRP</label>
-                <input id="vrp_x" type="number" class="form-control" placeholder="X">
-                <input id="vrp_y" type="number" class="form-control" placeholder="Y">
-                <input id="vrp_z" type="number" class="form-control" placeholder="Z">
-                <hr>
-
-                <label for="pencil">Ponto</label>
-                <input id="p_x" type="number" class="form-control" placeholder="X">
-                <input id="p_y" type="number" class="form-control" placeholder="Y">
-                <input id="p_z" type="number" class="form-control" placeholder="Z">
-                <hr>
-
-                <label for="pencil">Distancia</label>
-                <input id="distancia" type="number" class="form-control" placeholder="D">
-                <hr>
-
-                <label for="pencil">Polígono Regular</label>
-                <button id="regularPolPencil" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Desenhar
-                </button>
-                <input id="radius" type="number" class="form-control" placeholder="Raio">
-                <input id="sides" type="number" class="form-control" placeholder="Lados">
-                <hr>
-
-
-                <button id="apagar" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Limpar Tudo
-                </button>
-                <hr>
-
-                <button id="pintar" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Borda
-                </button>
-                <input id="cor" type="text" class="form-control" placeholder="Cor" value="#000000">
-                <hr>
-
-                <div class="btn-group btn-group-justified">
-
-                    <button id="selecionar" type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Ferramenta de Seleção
-                    </button>
-                    <button id="remover" type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remover
-                    </button>
-                </div>
-                <hr>
-                <button id="translar" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Translar
-                </button>
-            </div>
-
-            <br>
-            <label >Escala</label>
-            <div class="btn-group col-md-12">
-                <button id="escala-plus-x" type="button" class="btn-group">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true">X</span>
-                </button>
-                <button id="escala-minus-x" type="button" class="btn-group">
-                    <span class="glyphicon glyphicon-minus" aria-hidden="true">X</span>
-                </button>
-                <button id="escala-plus-y" type="button" class="btn-group">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true">Y</span>
-                </button>
-                <button id="escala-minus-y" type="button" class="btn-group">
-                    <span class="glyphicon glyphicon-minus" aria-hidden="true">Y</span>
-                </button>
-            </div>
             <hr>
-            <label >Cisalhamento</label>
-            <div class="btn-group col-md-12">
-                <button id="cisalhamento-plus" type="button" class="btn-group-sm">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn-group-sm">
-                    <span id="cisalhamento-minus" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                </button>
-            </div>
-        </div>
-        <div class="col-md-10">
-            <canvas width="400" height="300" id="canvas_frente" style="border: 1px solid black;">
-            </canvas>
-            <canvas width="400" height="300" id="canvas_topo" style="border: 1px solid black;">
-            </canvas>
 
-            <canvas id="canvas_lateral" width="400" height="300" style="border: 1px solid black;">
-            </canvas>
-            <canvas id="canvas_perspectiva" width="400" height="300" style="border: 1px solid black;">
-            </canvas>
-        </div>
+            <ul class="nav nav-pills flex-column">
+              <div class="form-group">
+                 <label for="visao">Visao</label>
+                 <select name="visao" id="visao" class="form-control" onchange="mudaView()">
+                     <option value="0">Geral</option>
+                     <option value="1">Frente</option>
+                     <option value="2">Topo</option>
+                     <option value="3">Lateral</option>
+                     <option value="4">Perspectiva</option>
+                 </select>
+             </div>
+            </ul>
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+                <label>Polígono Regular</label>
+                <div class="row">
+                  <div class="col-sm">
+                      <input id="raio" type="number" class="form-control" placeholder="Raio">
+                  </div>
+                  <div class="col-sm">
+                      <input id="lados" type="number" class="form-control" placeholder="Lados">
+                  </div>
+                </div>
+                <br/>
+                <button id="desenha-poligono-regular" type="button" class="btn btn-primary">Desenhar</button>
+            </ul>
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-secondary active">
+                    <input id="opt-select" type="radio" name="options" autocomplete="off" checked>
+                      <i class="fa fa-mouse-pointer" aria-hidden="true"></i>
+                  </label>
+                    <label class="btn btn-secondary">
+                    <input id="opt-move" type="radio" name="options" autocomplete="off">
+                      <i class="fa fa-arrows" aria-hidden="true"></i>
+                  </label>
+                  <label class="btn btn-secondary">
+                    <input id="opt-rotation" type="radio" name="options" autocomplete="off">
+                      <i class="fa fa-repeat" aria-hidden="true"></i>
+                  </label>
+                  <label class="btn btn-secondary">
+                    <input id="opt-resize" type="radio" name="options" autocomplete="off">
+                      <i class="fa fa-expand" aria-hidden="true"></i>
+                  </label>
+                </div>
+            </ul>
+
+        </nav>
+
+        <main role="main" class="col-sm-9 ml-sm-auto col-md-10">
+
+          <section class="row text-center placeholders" style="padding: 20px;">
+              <canvas width="400" height="300" id="canvas_frente" style="border: 1px solid black;">
+              </canvas>
+
+              <canvas width="400" height="300" id="canvas_topo" style="border: 1px solid black;">
+              </canvas>
+
+              <canvas id="canvas_lateral" width="400" height="300" style="border: 1px solid black;">
+              </canvas>
+
+              <canvas id="canvas_perspectiva" width="400" height="300" style="border: 1px solid black;">
+              </canvas>
+          </section>
+
+        </main>
     </div>
 </div>
 
 
 <!--IMPORTS-->
-<script src="js/vendor/modernizr-2.8.3.min.js"></script>
-<script src="js/vendor/jquery-1.12.0.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-<script src="js/plugins.js" type="text/javascript"></script>
-<script src="js/Models/Ponto.js"></script>
-<script src="js/Models/Face.js"></script>
-<script src="js/Models/Poligono.js"></script>
-<script src="js/Models/Aresta.js"></script>
-<script src="js/Utils/MathUtil.js"></script>
-<script src="js/Projetor.js"></script>
-<script src="js/Utils.js"></script>
-<script src="js/opcoes.js"></script>
-<script src="js/mouseActions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="js/vendor/jquery-3.2.1.min.js"></script>
+<script src="js/vendor/bootstrap.min.js"></script>
+
+<script src="js/models/Ponto.js"></script>
+<script src="js/models/Face.js"></script>
+<script src="js/models/Poligono.js"></script>
+<script src="js/models/Aresta.js"></script>
+<script src="js/functions/PoligonoUtil.js"></script>
+<script src="js/functions/MathUtil.js"></script>
+<script src="js/functions/Projetor.js"></script>
+<script src="js/view/ViewUtil.js"></script>
+<script src="js/view/Opcoes.js"></script>
+<script src="js/view/MouseActions.js"></script>
 <script src="js/Main.js"></script>
 
 
