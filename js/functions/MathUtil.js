@@ -120,3 +120,15 @@ function multiplicaMatriz (a, b) {
 
     return c
 }
+
+function crides(ponto1, ponto2){
+
+    var x = ponto1.x - ponto2.x;
+    var y = ponto1.y - ponto2.y;
+    var z = ponto1.z - ponto2.z;
+
+    var distance = Math.sqrt( (Math.pow(x,2)) + (Math.pow(y,2)) + (Math.pow(z,2)) );
+    return distance;
+}
+
+

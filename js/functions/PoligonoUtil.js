@@ -28,7 +28,7 @@ function criarPoligono(lados, raio, centro) {
 
     faces.push(new Face(arestas));
 
-    poligonos3D.push(new Poligono(arestas, vertices, faces, 'black'));
+    poligonos3D.push(new Poligono(arestas, vertices, faces, 'white', 'black'));
 }
 
 function desenhaPoligono() {
@@ -43,41 +43,49 @@ function desenhaPoligono() {
 
     poligonos3D.forEach(function (poligono) {
 
-        context1.strokeStyle = poligono.cor;
+       context1.strokeStyle = poligono.cor_aresta;
 
         poligono.faces.forEach(function (face) {
+
             face.arestas.forEach(function (aresta) {
 
                 context1.beginPath();
                 context1.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.y * zoom);
                 context1.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.y * zoom);
+
                 context1.closePath();
                 context1.stroke();
 
             });
+
         });
     });
 
     poligonos3D.forEach(function (poligono) {
 
-        context2.strokeStyle = poligono.cor;
+        context2.strokeStyle = poligono.cor_aresta;
 
         poligono.faces.forEach(function (face) {
+            context2.beginPath();
             face.arestas.forEach(function (aresta) {
 
-                context2.beginPath();
+
                 context2.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.z * zoom);
                 context2.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.z * zoom);
-                context2.closePath();
-                context2.stroke();
+
 
             });
+            context2.closePath();
+            context2.fillStyle = 'blue';
+            context2.fill();
+
+            context2.stroke();
         });
     });
 
     poligonos3D.forEach(function (poligono) {
 
-        context3.strokeStyle = poligono.cor;
+        context3.strokeStyle = poligono.cor_aresta;
 
         poligono.faces.forEach(function (face) {
             face.arestas.forEach(function (aresta) {
@@ -92,72 +100,48 @@ function desenhaPoligono() {
         });
     });
 
-    poligonos_perspectiva = convert3Dto2D([1000, 1000, 1000, 1], [0, 0, 0, 1], 20);
+    poligonos3D.forEach(function (poligono) {
 
-    poligonos_perspectiva.forEach(function (poligono) {
-
-        context4.strokeStyle = poligono.cor;
+        context4.strokeStyle = poligono.cor_aresta;
 
         poligono.faces.forEach(function (face) {
             face.arestas.forEach(function (aresta) {
 
+                var Mpontos = [];
+
+                Mpontos[0] = [];
+                Mpontos[1] = [];
+                Mpontos[2] = [];
+                Mpontos[3] = [];
+
+                Mpontos[0][0] = aresta.pontoA.x;
+                Mpontos[1][0] = aresta.pontoA.y;
+                Mpontos[2][0] = aresta.pontoA.z;
+                Mpontos[3][0] = 1;
+
+                Mpontos[0][1] = aresta.pontoB.x;
+                Mpontos[1][1] = aresta.pontoB.y;
+                Mpontos[2][1] = aresta.pontoB.z;
+                Mpontos[3][1] = 1;
+
+                var pontosfinal = multiplicaMatriz(projetor, Mpontos);
+
+                for (let j = 0; j < 2; j++) {
+                    pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
+                    pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
+                    pontosfinal[2][j] = pontosfinal[2][j] / pontosfinal[3][j];
+                    pontosfinal[3][j] = pontosfinal[3][j] / pontosfinal[3][j];
+                }
+
                 context4.beginPath();
-                context4.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.y * zoom);
-                context4.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.y * zoom);
+                context4.moveTo(pontosfinal[0][0] * zoom, pontosfinal[1][0] * zoom);
+                context4.lineTo(pontosfinal[0][1] * zoom, pontosfinal[1][1] * zoom);
                 context4.closePath();
                 context4.stroke();
 
             });
         });
     });
-
-}
-
-function criarPoligonoFoda(){
-
-    var b1 = new Ponto(50,50,50);
-    var b2 = new Ponto(150,50,50);
-    var b3 = new Ponto(150,50,150);
-    var b4 = new Ponto(50,50,150);
-
-    var t1 = new Ponto(50,150,50);
-    var t2 = new Ponto(150,150,50);
-    var t3 = new Ponto(150,150,150);
-    var t4 = new Ponto(50,150,150);
-
-    var vertices = [b1, b2, b3, b4, t1, t2, t3, t4];
-
-    var ab1 = new Aresta(b1, b2);
-    var ab2 = new Aresta(b2, b3);
-    var ab3 = new Aresta(b3, b4);
-    var ab4 = new Aresta(b4, b1);
-
-    var at1 = new Aresta(t1, t2);
-    var at2 = new Aresta(t2, t3);
-    var at3 = new Aresta(t3, t4);
-    var at4 = new Aresta(t4, t1);
-
-    var al1 = new Aresta(t1, b1);
-    var al2 = new Aresta(b2, t2);
-    var al3 = new Aresta(b3, t3);
-    var al4 = new Aresta(b4, t4);
-
-    var arestas = [ab1, ab2, ab3, ab4, at1, at2, at3, at4, al1, al2, al3, al4];
-
-    var fbase = new Face([ab1, ab2, ab3, ab4]);
-    var ftopo = new Face([at1, at2, at3, at4]);
-
-    var flateral1 = new Face([new Aresta(t1, t2), new Aresta(t2, b2), new Aresta(b2, b1), new Aresta(b1, t1)]);
-    var flateral2 = new Face([new Aresta(t3, t2), new Aresta(t2, b2), new Aresta(b2, b3), new Aresta(b3, t3)]);
-    var flateral3 = new Face([new Aresta(t4, t3), new Aresta(t3, b3), new Aresta(b3, b4), new Aresta(b4, t4)]);
-    var flateral4 = new Face([new Aresta(t1, t4), new Aresta(t4, b4), new Aresta(b4, b1), new Aresta(b1, t1)]);
-
-    var faces = [fbase, ftopo, flateral1, flateral2, flateral3, flateral4];
-    //var faces = [flateral4];
-
-    var poligonofoda = new Poligono (arestas, vertices, faces, 'black');
-
-    poligonos3D.push(poligonofoda);
 
 }
 
@@ -215,6 +199,147 @@ function escalonar(poligono, plus) {
     desenhaPoligono();
 }
 
+function revolucao(poligono, eixo, angulo, secoes, gap){
+
+    var graus = 0;
+
+    var centroide = poligono.centroide;
+
+    var origem = [[1, 0, 0, -centroide.x],
+                [0, 1, 0, -centroide.y + poligono.raio + parseInt(gap)],
+                [0, 0, 1, -centroide.z],
+                [0, 0, 0, 1]];
+
+    var pos = [[1, 0, 0, centroide.x],
+                [0, 1, 0, centroide.y + poligono.raio + parseInt(gap)],
+                [0, 0, 1, centroide.z],
+                [0, 0, 0, 1]];
+
+    var graus_section = angulo/secoes;
+
+    for (let i = 0; i <= secoes; i++) {
+
+        graus += graus_section;
+
+        var value = (graus * Math.PI)/180;
+
+        var rot_x = [[1, 0, 0, 0],
+                    [0, Math.cos(value), -Math.sin(value), 0],
+                    [0, Math.sin(value), Math.cos(value), 0],
+                    [0, 0, 0, 1]];
+
+        var rot_y = [[Math.cos(value), 0, Math.sin(value), 0],
+                        [0, 1, 0, 0],
+                        [-Math.sin(value), 0, Math.cos(value), 0],
+                        [0, 0, 0, 1]];
+
+        var rot_z = [[Math.cos(value), -Math.sin(value), 0, 0],
+                    [Math.sin(value), Math.cos(value), 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]];
+
+        var Mpontos = [];
+        var count = 0;
+
+        Mpontos[0] = [];
+        Mpontos[1] = [];
+        Mpontos[2] = [];
+        Mpontos[3] = [];
+
+        poligono.faces[0].arestas.forEach(function (aresta) {
+
+            Mpontos[0][count] = aresta.pontoA.x;
+            Mpontos[1][count] = aresta.pontoA.y;
+            Mpontos[2][count] = aresta.pontoA.z;
+            Mpontos[3][count] = 1;
+
+            ++count;
+        });
+
+        switch (eixo) {
+            case 'x':
+                var M = multiplicaMatriz(rot_x, origem);
+                var Mfinal = multiplicaMatriz(pos, M);
+                break;
+            case 'y':
+                var M = multiplicaMatriz(rot_y, origem);
+                var Mfinal = multiplicaMatriz(pos, M);
+                break;
+            case 'z':
+                var M = multiplicaMatriz(rot_z, origem);
+                var Mfinal = multiplicaMatriz(pos, M);
+                break;
+        }
+
+        var pontosfinal = multiplicaMatriz(Mfinal, Mpontos);
+
+        var newpontos = [];
+        for (let j = 0; j < count; j++) {
+            pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
+            pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
+            pontosfinal[2][j] = pontosfinal[2][j] / pontosfinal[3][j];
+            pontosfinal[3][j] = pontosfinal[3][j] / pontosfinal[3][j];
+
+            var ponto = new Ponto(pontosfinal[0][j], pontosfinal[1][j], pontosfinal[2][j])
+
+            newpontos.push(ponto);
+            poligono.vertices.push(ponto);
+
+        }
+
+        var arestas = [];
+
+        for (let x = 0; x < count; x++) {
+
+            if (x == 0) {
+                ponto_temp = newpontos[x];
+            } else {
+                ponto_atual = newpontos[x];
+                arestas.push(new Aresta(ponto_temp, ponto_atual));
+                ponto_temp = ponto_atual;
+            }
+        }
+
+        arestas.push(new Aresta(ponto_temp, newpontos[0]));
+
+        poligono.faces.push(new Face(arestas));
+
+    }
+
+    delete poligono.faces[0];
+
+    var faces_aux = [];
+
+    poligono.faces.forEach(function (face, index) {
+
+        var arestas = [];
+
+        var face_aux;
+
+        if(poligono.faces.length - 1 != index){
+
+            face_aux = poligono.faces[index + 1];
+
+            for (let i = 0; i < face.arestas.length; i++) {
+                arestas.push(face.arestas[i]);
+                arestas.push(face_aux.arestas[i]);
+
+                var a = new Aresta(face.arestas[i].pontoA, face_aux.arestas[i].pontoA);
+                var b = new Aresta(face.arestas[i].pontoB, face_aux.arestas[i].pontoB);
+
+                arestas.push(a);
+                arestas.push(b);
+            }
+        }
+
+        faces_aux.push(new Face(arestas));
+    });
+
+    poligono.faces = faces_aux;
+
+    desenhaPoligono();
+}
+
 function rotacao(poligono, option) {
 
     var centroide = poligono.centroide;
@@ -229,7 +354,7 @@ function rotacao(poligono, option) {
                     [0, 0, 1, centroide.z],
                     [0, 0, 0, 1]];
 
-    var value = Math.PI * 180 + 2;
+    var value = (10 * Math.PI)/180;
 
     var rot_x = [[1, 0, 0, 0],
                 [0, Math.cos(value), -Math.sin(value), 0],
@@ -308,123 +433,137 @@ function rotacao(poligono, option) {
     desenhaPoligono();
 }
 
-function cisalhamento(poligono, shx) {
-    let max_x = Number.NEGATIVE_INFINITY,
-        min_x = Number.POSITIVE_INFINITY;
-    let aux;
+function cisalhamento(poligono, sh, eixo) {
 
-    let centro_x = (poligono.x_max + poligono.x_min) / 2;
-    let centro_y = (poligono.y_max + poligono.y_min) / 2;
+    var centroide = poligono.centroide;
 
+    switch (eixo){
+        case 'x':
+            poligono.vertices.forEach(function (vertice) {
+                vertice.x = ((vertice.x - centroide.x) * sh) + centroide.x;
+            });
+            break;
 
-    poligono.arestas.forEach(function (e, index) {
-        aux = poligono.arestas[index].pontoA.x + shx * poligono.arestas[index].pontoA.y;
-        poligono.arestas[index].pontoA.x = aux;
+        case 'y':
+            poligono.vertices.forEach(function (vertice) {
+                vertice.y = ((vertice.y - centroide.y) * sh) + centroide.y;
+            });
+            break;
 
-        if (aux > max_x) {
-            max_x = aux;
-        }
-        if (aux < min_x) {
-            min_x = aux
-        }
-
-        aux = poligono.arestas[index].pontoB.x + shx * poligono.arestas[index].pontoB.y;
-        poligono.arestas[index].pontoB.x = aux;
-
-        if (aux > max_x) {
-            max_x = aux;
-        }
-        if (aux < min_x) {
-            min_x = aux
-        }
-    });
-
-    poligono.x_max = max_x;
-    poligono.x_min = min_x;
-
-    let centro_x_atual = (poligono.x_max + poligono.x_min) / 2;
-    let centro_y_atual = (poligono.y_max + poligono.y_min) / 2;
-
-    let diffx = centro_x - centro_x_atual;
-    let diffy = centro_y - centro_y_atual;
-
-    translar(poligono, diffx, diffy);
-
-    // reeiniciaTela(canvas, poligonos);
-    // drawSelectionRect(poligonos, selecionado_index);
-}
-
-/**
- * Retorna os menores e maiores pontos de um poligono
- * @param arestas
- */
-function extremos(pontos) {
-
-    let max_x = Number.NEGATIVE_INFINITY, max_y = Number.NEGATIVE_INFINITY,
-        min_x = Number.POSITIVE_INFINITY, min_y = Number.POSITIVE_INFINITY,
-        min_z = Number.POSITIVE_INFINITY, max_z = Number.NEGATIVE_INFINITY;
-
-    pontos.forEach(function (element) {
-        if (element.x > max_x)
-            max_x = element.x;
-
-        if (element.x < min_x)
-            min_x = element.x;
-
-        if (element.y > max_y)
-            max_y = element.y;
-
-        if (element.y < min_y)
-            min_y = element.y;
-
-        if (element.z > max_z)
-            max_z = element.z;
-
-        if (element.z < min_z)
-            min_z = element.z;
-    });
-
-    return [max_x, max_y, min_x, min_y, max_z, min_z];
-}
-
-function atualizaExtremos(poligono) {
-    aux = extremos(poligono.pontos);
-    poligono.x_max = aux[0];
-    poligono.y_max = aux[1];
-    poligono.x_min = aux[2];
-    poligono.y_min = aux[3];
-
-}
-
-/**
- * Verifica se o ponto está dentro do poligono,
- * a verificação irá começar de traz para frente
- * @param lista_poligonos
- */
-function verificaPontoRect(p, poligono) {
-
-    //
-    if (p.x < poligono.x_min || p.x > poligono.x_max ||
-        p.y < poligono.y_min || p.y > poligono.y_max) {
-        return false;
-    } else {
-        return true;
+        case 'z':
+            poligono.vertices.forEach(function (vertice) {
+                vertice.z = ((vertice.z - centroide.z) * sh) + centroide.z;
+            });
+            break;
     }
+
+    desenhaPoligono();
 }
 
-/**
- * Método de desenho do retangulo de seleção dos poligonos
- *
- * @param poligonos
- * @param index
- */
-function drawSelectionRect(poligonos, index) {
-    context.beginPath();
-    context.moveTo(poligonos[index].x_min, poligonos[index].y_min);
-    context.lineTo(poligonos[index].x_max, poligonos[index].y_min);
-    context.lineTo(poligonos[index].x_max, poligonos[index].y_max);
-    context.lineTo(poligonos[index].x_min, poligonos[index].y_max);
-    context.closePath();
-    context.strokeStyle = '#544aff';
-    context.stroke();
+function verificaPontoPoligono(poligono, p, context) {
+
+    var extremos = poligono.extremos;
+
+    switch (context){
+        case 1:
+            if (p.x < extremos[3] || p.x > extremos[0] ||
+                p.y < extremos[4] || p.y > extremos[1]) {
+                return false;
+            } else {
+                return true;
+            }
+            break;
+        case 2:
+            if (p.x < extremos[3] || p.x > extremos[0] ||
+                p.z < extremos[5] || p.z > extremos[2]) {
+                return false;
+            } else {
+                return true;
+            }
+            break;
+        case 3:
+            if (p.z < extremos[5] || p.z > extremos[2] ||
+                p.y < extremos[4] || p.y > extremos[1]) {
+                return false;
+            } else {
+                return true;
+            }
+            break;
+    }
+
 }
+
+function deleteAll(){
+
+    poligonos3D = [];
+
+    poligono_selected = -1;
+    reeiniciaTela();
+
+}
+
+function deleteSelected(){
+
+    poligonos3D.splice(poligono_selected, 1);
+
+    poligono_selected = -1;
+    desenhaPoligono();
+
+}
+
+var openPoligons = function(e) {
+    var file = e.target.files[0];
+    if (!file) {
+        return;
+    }
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        var text = reader.result;
+
+        var clone = JSON.parse(text);
+
+        for (let i = 0; i < clone.length; i ++) {
+
+            var faces = [];
+            var arestas = [];
+            var vertices = [];
+            for (let f = 0; f < clone[i]._faces.length; f ++) {
+
+                var arestas_aux = [];
+
+                for (let a = 0; a < clone[i]._faces[f]._arestas.length; a ++) {
+
+                    var pontoA = new Ponto(
+                        clone[i]._faces[f]._arestas[a]._pontoA._x,
+                        clone[i]._faces[f]._arestas[a]._pontoA._y,
+                        clone[i]._faces[f]._arestas[a]._pontoA._z
+                    );
+                    var pontoB = new Ponto(
+                        clone[i]._faces[f]._arestas[a]._pontoB._x,
+                        clone[i]._faces[f]._arestas[a]._pontoB._y,
+                        clone[i]._faces[f]._arestas[a]._pontoB._z
+                    );
+
+                    vertices.push(pontoA);
+                    vertices.push(pontoB);
+
+                    arestas.push(new Aresta(pontoA, pontoB));
+                    arestas_aux.push(new Aresta(pontoA, pontoB));
+                }
+
+                faces.push(new Face(arestas_aux));
+            }
+
+            poligonos3D.push(
+              new Poligono(
+                  arestas, vertices, faces, clone[i]._cor, clone[i]._cor_aresta
+              ));
+        }
+
+        desenhaPoligono();
+    };
+    reader.readAsText(file);
+};
+

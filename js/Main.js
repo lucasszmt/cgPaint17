@@ -16,9 +16,10 @@ startCanvas(canvasTopo, context2);
 startCanvas(canvasLateral, context3);
 startCanvas(canvasPerspectiva, context4);
 
+var projetor = criarProjetor([1000, 1000, 1000, 1], [0, 0, 0, 1], 20);
+
 var poligonos3D = [];
-criarPoligonoFoda();
-desenhaPoligono();
+var poligono_selected = -1;
 
 var width_default = 400;
 var height_default = 300;
@@ -30,43 +31,28 @@ var context1_dragging = false;
 var context2_dragging = false;
 var context3_dragging = false;
 
+var pencil_pontos = [];
+
 // adicionando os eventos para os canvas
-//canvasFrente.addEventListener('click', mouseclick_context1, false);
+canvasFrente.addEventListener('click', mouseclick_context1, false);
+canvasFrente.addEventListener('contextmenu', close_pencil, false);
 canvasFrente.addEventListener('mousedown', mousedown_context1, false);
 canvasFrente.addEventListener('mouseup', mouseup_context1, false);
 canvasFrente.addEventListener('mousemove', mousemove_context1, false);
 canvasFrente.addEventListener('mousewheel', mousewheel_context1, false);
 
-//canvasTopo.addEventListener('click', mouseclick_context2, false);
+canvasTopo.addEventListener('click', mouseclick_context2, false);
+canvasTopo.addEventListener('contextmenu', close_pencil, false);
 canvasTopo.addEventListener('mousedown', mousedown_context2, false);
 canvasTopo.addEventListener('mouseup', mouseup_context2, false);
 canvasTopo.addEventListener('mousemove', mousemove_context2, false);
 canvasTopo.addEventListener('mousewheel', mousewheel_context2, false);
 
-//canvasTopo.addEventListener('click', mouseclick_context2, false);
+canvasLateral.addEventListener('click', mouseclick_context3, false);
+canvasLateral.addEventListener('contextmenu', close_pencil, false);
 canvasLateral.addEventListener('mousedown', mousedown_context3, false);
 canvasLateral.addEventListener('mouseup', mouseup_context3, false);
 canvasLateral.addEventListener('mousemove', mousemove_context3, false);
 canvasLateral.addEventListener('mousewheel', mousewheel_context3, false);
 
-
-var openFile = function(event) {
-    var input = event.target;
-
-    var reader = new FileReader();
-    reader.onload = function(){
-        var text = reader.result;
-
-        var clone = JSON.parse(text);
-//            console.log(clone[0]);
-        for (let i = 0; i < clone.length; i ++) {
-            poligonos.push(new Poligono(
-                clone[i]._arestas, clone[i]._x_max, clone[i]._x_min, clone[i]._y_max, clone[i]._y_min, clone[i]._pontos
-            ));
-        }
-
-        reeiniciaTela(canvas, poligonos);
-
-    };
-    reader.readAsText(input.files[0]);
-};
+document.getElementById('file-input').addEventListener('change', openPoligons, false);

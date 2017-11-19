@@ -24,11 +24,12 @@
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="#">Arquivo</a>
-        </li>
+                    <a id="open" class="nav-link" href="#">Abrir</a>
+                </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Sobre</a>
+            <a id="save" class="nav-link" href="#">Salvar</a>
         </li>
+
     </ul>
   </div>
 </nav>
@@ -36,6 +37,12 @@
 <div class="container" style="max-width: 100%;">
     <div class="row">
         <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+
+            <hr>
+            <ul class="nav nav-pills flex-column">
+                <label>Abrir Cena</label>
+                <input type="file" id="file-input" >
+            </ul>
 
             <hr>
 
@@ -50,22 +57,6 @@
                      <option value="4">Perspectiva</option>
                  </select>
              </div>
-            </ul>
-
-            <hr>
-
-            <ul class="nav nav-pills flex-column">
-                <label>Polígono Regular</label>
-                <div class="row">
-                  <div class="col-sm">
-                      <input id="raio" type="number" class="form-control" placeholder="Raio">
-                  </div>
-                  <div class="col-sm">
-                      <input id="lados" type="number" class="form-control" placeholder="Lados">
-                  </div>
-                </div>
-                <br/>
-                <button id="desenha-poligono-regular" type="button" class="btn btn-primary">Desenhar</button>
             </ul>
 
             <hr>
@@ -88,14 +79,39 @@
                     <input id="opt-resize" type="radio" name="options" autocomplete="off">
                       <i class="fa fa-expand" aria-hidden="true"></i>
                   </label>
+                   <label class="btn btn-secondary">
+                    <input id="opt-pencil" type="radio" name="options" autocomplete="off">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                  </label>
                 </div>
+            </ul>
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+                <label>Cisalhamento</label>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                     <select name="eixo_revolucao" id="eixo-cisalhamento" class="form-control">
+                         <option value="x">X</option>
+                         <option value="y">Y</option>
+                         <option value="z">Z</option>
+                     </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="sh" type="number" class="form-control" placeholder="SH">
+                    </div>
+                </div>
+
+                <button id="cisalhamento" type="button" class="btn btn-primary">Gerar</button>
             </ul>
 
         </nav>
 
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10">
+        <main role="main" class="col-sm-9 col-md-7" style="padding: 0; padding-left: 10px;">
 
           <section class="row text-center placeholders" style="padding: 20px;">
+
               <canvas width="400" height="300" id="canvas_frente" style="border: 1px solid black;">
               </canvas>
 
@@ -110,6 +126,70 @@
           </section>
 
         </main>
+
+
+        <nav class="col-md-3 bg-light sidebar">
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+                <label>Polígono Regular</label>
+                <div class="row">
+                  <div class="col-sm">
+                      <input id="lados" type="number" class="form-control" placeholder="Lados">
+                  </div>
+                    <div class="col-sm">
+                        <button id="desenha-poligono-regular" type="button" class="btn btn-primary">Desenhar</button>
+                        </div>
+                </div>
+
+            </ul>
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+                <label>Revolução</label>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                     <select name="eixo_revolucao" id="eixo_revolucao" class="form-control">
+                         <option value="x">X</option>
+                         <option value="y">Y</option>
+                         <option value="z">Z</option>
+                     </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="angulo" type="number" class="form-control" placeholder="Ângulo">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <input id="secoes" type="number" class="form-control" placeholder="Seções">
+                    </div>
+                    <div class="col-sm">
+                        <input id="gap" type="number" class="form-control" placeholder="Gap">
+                    </div>
+                </div>
+                <br/>
+                <button id="gerar-revolucao" type="button" class="btn btn-primary">Gerar</button>
+            </ul>
+
+            <hr>
+
+            <ul class="nav nav-pills flex-column">
+
+                <div class="row">
+                   <div class="col-sm">
+                       <button id="delete-selected" type="button" class="btn btn-danger" onclick="deleteSelected()">Apagar Selecionado</button>
+                   </div>
+                   <div class="col-sm">
+                       <button id="delete-all" type="button" class="btn btn-danger" onclick="deleteAll()">Apagar Tudo</button>
+                   </div>
+               </div>
+
+            </ul>
+        </nav>
+
     </div>
 </div>
 
@@ -120,6 +200,8 @@
         crossorigin="anonymous"></script>
 <script src="js/vendor/jquery-3.2.1.min.js"></script>
 <script src="js/vendor/bootstrap.min.js"></script>
+
+<script src="js/vendor/wz_jsgraphics.js"></script>
 
 <script src="js/models/Ponto.js"></script>
 <script src="js/models/Face.js"></script>

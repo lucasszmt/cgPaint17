@@ -151,7 +151,7 @@
         }
     }
 
-    function convert3Dto2D(vrp, ponto, distancia) {
+    function criarProjetor(vrp, ponto, distancia) {
 
         //VRP: Posicao do observador no mundo
         //Ponto: onde a camera esta apontada
@@ -175,73 +175,7 @@
 
         var TP = sruTOsrt(S, P, C, V, O, 0);//0 = Perspectiva  1 = Ortografica
 
-        var poligonos2D = [];
-        poligonos3D.forEach(function (poligono) {
-            var faces = [];
-            poligono.faces.forEach(function (face) {
-                var arestas = [];
-                face.arestas.forEach(function (aresta) {
-                    var a = new Aresta(
-                        new Ponto(aresta.pontoA.x, aresta.pontoA.y, aresta.pontoA.z),
-                        new Ponto(aresta.pontoB.x, aresta.pontoB.y, aresta.pontoB.z));
-                    arestas.push(a);
-                });
-                faces.push(new Face(arestas));
-            });
-
-            poligonos2D.push(new Poligono(null, null, faces, 'black'));
-        });
-
-        var Mpontos = [];
-        var count = 0;
-        poligonos2D.forEach(function (poligono) {
-            Mpontos[0] = [];
-            Mpontos[1] = [];
-            Mpontos[2] = [];
-            Mpontos[3] = [];
-            poligono.faces.forEach(function (face) {
-               face.arestas.forEach(function (aresta) {
-                    Mpontos[0][count] = aresta.pontoA.x;
-                    Mpontos[1][count] = aresta.pontoA.y;
-                    Mpontos[2][count] = aresta.pontoA.z;
-                    Mpontos[3][count] = 1;
-                    ++count;
-
-                    Mpontos[0][count] = aresta.pontoB.x;
-                    Mpontos[1][count] = aresta.pontoB.y;
-                    Mpontos[2][count] = aresta.pontoB.z;
-                    Mpontos[3][count] = 1;
-                    ++count;
-               });
-            });
-       });
-
-        var pontosfinal = multiplicaMatriz(TP, Mpontos);
-
-        for (let j = 0; j < count; j++) {
-            pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
-            pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
-            pontosfinal[2][j] = pontosfinal[2][j] / pontosfinal[3][j];
-            pontosfinal[3][j] = pontosfinal[3][j] / pontosfinal[3][j];
-        }
-
-        count = 0;
-
-        poligonos2D.forEach(function (poligono) {
-            poligono.faces.forEach(function (face) {
-               face.arestas.forEach(function (aresta) {
-                   aresta.pontoA.x = pontosfinal[0][count];
-                   aresta.pontoA.y = pontosfinal[1][count];
-                   ++count;
-
-                   aresta.pontoB.x = pontosfinal[0][count];
-                   aresta.pontoB.y = pontosfinal[1][count];
-                   ++count;
-               });
-            });
-       });
-
-        return poligonos2D;
+        return TP;
     }
 
 
