@@ -1,3 +1,9 @@
+/**
+ * Método para criação de poligonos regulares
+ * @param lados
+ * @param raio
+ * @param centro
+ */
 function criarPoligono(lados, raio, centro) {
 
     var arestas = [];
@@ -29,6 +35,7 @@ function criarPoligono(lados, raio, centro) {
     faces.push(new Face(arestas));
 
     poligonos3D.push(new Poligono(arestas, vertices, faces, 'white', 'black'));
+    console.log(new Poligono(arestas, vertices, faces, 'white', 'black'))
 }
 
 function desenhaPoligono() {
@@ -204,23 +211,25 @@ function revolucao(poligono, eixo, angulo, secoes, gap){
     var graus = 0;
 
     var centroide = poligono.centroide;
-
+    //move centroide pra origem + raio + gap
     var origem = [[1, 0, 0, -centroide.x],
                 [0, 1, 0, -centroide.y + poligono.raio + parseInt(gap)],
                 [0, 0, 1, -centroide.z],
                 [0, 0, 0, 1]];
-
+    // retorna
     var pos = [[1, 0, 0, centroide.x],
                 [0, 1, 0, centroide.y + poligono.raio + parseInt(gap)],
                 [0, 0, 1, centroide.z],
                 [0, 0, 0, 1]];
 
+    // graus das sessões
     var graus_section = angulo/secoes;
 
     for (let i = 0; i <= secoes; i++) {
 
         graus += graus_section;
 
+        //radianos
         var value = (graus * Math.PI)/180;
 
         var rot_x = [[1, 0, 0, 0],
@@ -274,6 +283,7 @@ function revolucao(poligono, eixo, angulo, secoes, gap){
         var pontosfinal = multiplicaMatriz(Mfinal, Mpontos);
 
         var newpontos = [];
+        //norma
         for (let j = 0; j < count; j++) {
             pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
             pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
@@ -310,6 +320,7 @@ function revolucao(poligono, eixo, angulo, secoes, gap){
 
     var faces_aux = [];
 
+    // cria as faces laterais
     poligono.faces.forEach(function (face, index) {
 
         var arestas = [];
@@ -567,3 +578,10 @@ var openPoligons = function(e) {
     reader.readAsText(file);
 };
 
+function calculoDaNormal(p1, p2, p3, n) {
+    var a = (p3.y - p2.y) * (p1.z - p2.z) - (p1.y - p2.y) * (p3.z - p2.z);
+    var b = (p3.z - p2.z) * (p1.x - p2.x) - (p1.z - p2.z) * (p3.x - p2.x);
+    var a = (p3.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p3.y - p2.y);
+
+    return (a * n.x) + (b * n.y) + (c * n.z) > 0;
+}

@@ -121,6 +121,13 @@ function multiplicaMatriz (a, b) {
     return c
 }
 
+/**
+ * Distancia euclidiana
+ *
+ * @param ponto1
+ * @param ponto2
+ * @returns {number}
+ */
 function crides(ponto1, ponto2){
 
     var x = ponto1.x - ponto2.x;
