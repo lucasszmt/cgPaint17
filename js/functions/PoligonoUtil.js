@@ -42,7 +42,7 @@ function desenhaPoligono() {
 
     var zoom = 1;
 
-    if(maximized){
+    if (maximized) {
         zoom = 2;
     }
 
@@ -50,7 +50,7 @@ function desenhaPoligono() {
 
     poligonos3D.forEach(function (poligono) {
 
-       context1.strokeStyle = poligono.cor_aresta;
+        context1.strokeStyle = poligono.cor_aresta;
 
         poligono.faces.forEach(function (face) {
 
@@ -152,9 +152,123 @@ function desenhaPoligono() {
 
 }
 
+function desenhaPoligonoOcultacao() {
+
+    var zoom = 1;
+
+    if (maximized) {
+        zoom = 2;
+    }
+
+    reeiniciaTela();
+
+    poligonos3D.forEach(function (poligono) {
+
+        context1.strokeStyle = poligono.cor_aresta;
+
+        faces.forEach(function (face) {
+
+            face.arestas.forEach(function (aresta) {
+
+                context1.beginPath();
+                context1.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.y * zoom);
+                context1.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.y * zoom);
+
+                context1.closePath();
+                context1.stroke();
+
+            });
+
+        });
+    });
+
+    poligonos3D.forEach(function (poligono) {
+
+        context2.strokeStyle = poligono.cor_aresta;
+
+        poligono.faces.forEach(function (face) {
+            context2.beginPath();
+            face.arestas.forEach(function (aresta) {
+
+
+                context2.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.z * zoom);
+                context2.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.z * zoom);
+
+
+            });
+            context2.closePath();
+            context2.fillStyle = 'blue';
+            context2.fill();
+
+            context2.stroke();
+        });
+    });
+
+    poligonos3D.forEach(function (poligono) {
+
+        context3.strokeStyle = poligono.cor_aresta;
+
+        poligono.faces.forEach(function (face) {
+            face.arestas.forEach(function (aresta) {
+
+                context3.beginPath();
+                context3.moveTo(aresta.pontoA.z * zoom, aresta.pontoA.y * zoom);
+                context3.lineTo(aresta.pontoB.z * zoom, aresta.pontoB.y * zoom);
+                context3.closePath();
+                context3.stroke();
+
+            });
+        });
+    });
+
+    poligonos3D.forEach(function (poligono) {
+
+        context4.strokeStyle = poligono.cor_aresta;
+
+        poligono.faces.forEach(function (face) {
+            face.arestas.forEach(function (aresta) {
+
+                var Mpontos = [];
+
+                Mpontos[0] = [];
+                Mpontos[1] = [];
+                Mpontos[2] = [];
+                Mpontos[3] = [];
+
+                Mpontos[0][0] = aresta.pontoA.x;
+                Mpontos[1][0] = aresta.pontoA.y;
+                Mpontos[2][0] = aresta.pontoA.z;
+                Mpontos[3][0] = 1;
+
+                Mpontos[0][1] = aresta.pontoB.x;
+                Mpontos[1][1] = aresta.pontoB.y;
+                Mpontos[2][1] = aresta.pontoB.z;
+                Mpontos[3][1] = 1;
+
+                var pontosfinal = multiplicaMatriz(projetor, Mpontos);
+
+                for (let j = 0; j < 2; j++) {
+                    pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
+                    pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
+                    pontosfinal[2][j] = pontosfinal[2][j] / pontosfinal[3][j];
+                    pontosfinal[3][j] = pontosfinal[3][j] / pontosfinal[3][j];
+                }
+
+                context4.beginPath();
+                context4.moveTo(pontosfinal[0][0] * zoom, pontosfinal[1][0] * zoom);
+                context4.lineTo(pontosfinal[0][1] * zoom, pontosfinal[1][1] * zoom);
+                context4.closePath();
+                context4.stroke();
+
+            });
+        });
+    });
+
+}
+
 function translar(poligono, value1, value2, op) {
 
-    switch (op){
+    switch (op) {
         case 1:
             var centroide = poligono.centroide;
 
@@ -193,59 +307,46 @@ function translar(poligono, value1, value2, op) {
     desenhaPoligono();
 }
 
-function escalonar(poligono, plus) {
-
-    var centroide = poligono.centroide;
-
-    poligono.vertices.forEach(function (vertice) {
-        vertice.x = ((vertice.x - centroide.x) * plus) + centroide.x;
-        vertice.y = ((vertice.y - centroide.y) * plus) + centroide.y;
-        vertice.z = ((vertice.z - centroide.z) * plus) + centroide.z;
-    });
-
-    desenhaPoligono();
-}
-
-function revolucao(poligono, eixo, angulo, secoes, gap){
+function revolucao(poligono, eixo, angulo, secoes, gap) {
 
     var graus = 0;
 
     var centroide = poligono.centroide;
     //move centroide pra origem + raio + gap
     var origem = [[1, 0, 0, -centroide.x],
-                [0, 1, 0, -centroide.y + poligono.raio + parseInt(gap)],
-                [0, 0, 1, -centroide.z],
-                [0, 0, 0, 1]];
+        [0, 1, 0, -centroide.y + poligono.raio + parseInt(gap)],
+        [0, 0, 1, -centroide.z],
+        [0, 0, 0, 1]];
     // retorna
     var pos = [[1, 0, 0, centroide.x],
-                [0, 1, 0, centroide.y + poligono.raio + parseInt(gap)],
-                [0, 0, 1, centroide.z],
-                [0, 0, 0, 1]];
+        [0, 1, 0, centroide.y + poligono.raio + parseInt(gap)],
+        [0, 0, 1, centroide.z],
+        [0, 0, 0, 1]];
 
     // graus das sessões
-    var graus_section = angulo/secoes;
+    var graus_section = angulo / secoes;
 
     for (let i = 0; i <= secoes; i++) {
 
         graus += graus_section;
 
         //radianos
-        var value = (graus * Math.PI)/180;
+        var value = (graus * Math.PI) / 180;
 
         var rot_x = [[1, 0, 0, 0],
-                    [0, Math.cos(value), -Math.sin(value), 0],
-                    [0, Math.sin(value), Math.cos(value), 0],
-                    [0, 0, 0, 1]];
+            [0, Math.cos(value), -Math.sin(value), 0],
+            [0, Math.sin(value), Math.cos(value), 0],
+            [0, 0, 0, 1]];
 
         var rot_y = [[Math.cos(value), 0, Math.sin(value), 0],
-                        [0, 1, 0, 0],
-                        [-Math.sin(value), 0, Math.cos(value), 0],
-                        [0, 0, 0, 1]];
+            [0, 1, 0, 0],
+            [-Math.sin(value), 0, Math.cos(value), 0],
+            [0, 0, 0, 1]];
 
         var rot_z = [[Math.cos(value), -Math.sin(value), 0, 0],
-                    [Math.sin(value), Math.cos(value), 0, 0],
-                    [0, 0, 1, 0],
-                    [0, 0, 0, 1]];
+            [Math.sin(value), Math.cos(value), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]];
 
         var Mpontos = [];
         var count = 0;
@@ -327,7 +428,7 @@ function revolucao(poligono, eixo, angulo, secoes, gap){
 
         var face_aux;
 
-        if(poligono.faces.length - 1 != index){
+        if (poligono.faces.length - 1 != index) {
 
             face_aux = poligono.faces[index + 1];
 
@@ -351,36 +452,49 @@ function revolucao(poligono, eixo, angulo, secoes, gap){
     desenhaPoligono();
 }
 
+function escalonar(poligono, plus) {
+
+    var centroide = poligono.centroide;
+
+    poligono.vertices.forEach(function (vertice) {
+        vertice.x = ((vertice.x - centroide.x) * plus) + centroide.x;
+        vertice.y = ((vertice.y - centroide.y) * plus) + centroide.y;
+        vertice.z = ((vertice.z - centroide.z) * plus) + centroide.z;
+    });
+
+    desenhaPoligono();
+}
+
 function rotacao(poligono, option) {
 
     var centroide = poligono.centroide;
 
     var origem = [[1, 0, 0, -centroide.x],
-                [0, 1, 0, -centroide.y],
-                [0, 0, 1, -centroide.z],
-                [0, 0, 0, 1]];
+        [0, 1, 0, -centroide.y],
+        [0, 0, 1, -centroide.z],
+        [0, 0, 0, 1]];
 
     var pos = [[1, 0, 0, centroide.x],
-                    [0, 1, 0, centroide.y],
-                    [0, 0, 1, centroide.z],
-                    [0, 0, 0, 1]];
+        [0, 1, 0, centroide.y],
+        [0, 0, 1, centroide.z],
+        [0, 0, 0, 1]];
 
-    var value = (10 * Math.PI)/180;
+    var value = (10 * Math.PI) / 180;
 
     var rot_x = [[1, 0, 0, 0],
-                [0, Math.cos(value), -Math.sin(value), 0],
-                [0, Math.sin(value), Math.cos(value), 0],
-                [0, 0, 0, 1]];
+        [0, Math.cos(value), -Math.sin(value), 0],
+        [0, Math.sin(value), Math.cos(value), 0],
+        [0, 0, 0, 1]];
 
     var rot_y = [[Math.cos(value), 0, Math.sin(value), 0],
-                [0, 1, 0, 0],
-                [-Math.sin(value), 0, Math.cos(value), 0],
-                [0, 0, 0, 1]];
+        [0, 1, 0, 0],
+        [-Math.sin(value), 0, Math.cos(value), 0],
+        [0, 0, 0, 1]];
 
     var rot_z = [[Math.cos(value), -Math.sin(value), 0, 0],
-                [Math.sin(value), Math.cos(value), 0, 0],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1]];
+        [Math.sin(value), Math.cos(value), 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]];
 
 
     var Mpontos = [];
@@ -401,7 +515,7 @@ function rotacao(poligono, option) {
         ++count;
     });
 
-    switch (option){
+    switch (option) {
         case 'x':
             var M3 = multiplicaMatriz(rot_x, origem);
             var Mfinal = multiplicaMatriz(pos, M3);
@@ -448,7 +562,7 @@ function cisalhamento(poligono, sh, eixo) {
 
     var centroide = poligono.centroide;
 
-    switch (eixo){
+    switch (eixo) {
         case 'x':
             poligono.vertices.forEach(function (vertice) {
                 vertice.x = ((vertice.x - centroide.x) * sh) + centroide.x;
@@ -475,7 +589,7 @@ function verificaPontoPoligono(poligono, p, context) {
 
     var extremos = poligono.extremos;
 
-    switch (context){
+    switch (context) {
         case 1:
             if (p.x < extremos[3] || p.x > extremos[0] ||
                 p.y < extremos[4] || p.y > extremos[1]) {
@@ -504,7 +618,7 @@ function verificaPontoPoligono(poligono, p, context) {
 
 }
 
-function deleteAll(){
+function deleteAll() {
 
     poligonos3D = [];
 
@@ -513,7 +627,7 @@ function deleteAll(){
 
 }
 
-function deleteSelected(){
+function deleteSelected() {
 
     poligonos3D.splice(poligono_selected, 1);
 
@@ -522,29 +636,29 @@ function deleteSelected(){
 
 }
 
-var openPoligons = function(e) {
+var openPoligons = function (e) {
     var file = e.target.files[0];
     if (!file) {
         return;
     }
     var reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
 
         var text = reader.result;
 
         var clone = JSON.parse(text);
 
-        for (let i = 0; i < clone.length; i ++) {
+        for (let i = 0; i < clone.length; i++) {
 
             var faces = [];
             var arestas = [];
             var vertices = [];
-            for (let f = 0; f < clone[i]._faces.length; f ++) {
+            for (let f = 0; f < clone[i]._faces.length; f++) {
 
                 var arestas_aux = [];
 
-                for (let a = 0; a < clone[i]._faces[f]._arestas.length; a ++) {
+                for (let a = 0; a < clone[i]._faces[f]._arestas.length; a++) {
 
                     var pontoA = new Ponto(
                         clone[i]._faces[f]._arestas[a]._pontoA._x,
@@ -568,9 +682,9 @@ var openPoligons = function(e) {
             }
 
             poligonos3D.push(
-              new Poligono(
-                  arestas, vertices, faces, clone[i]._cor, clone[i]._cor_aresta
-              ));
+                new Poligono(
+                    arestas, vertices, faces, clone[i]._cor, clone[i]._cor_aresta
+                ));
         }
 
         desenhaPoligono();
@@ -578,10 +692,40 @@ var openPoligons = function(e) {
     reader.readAsText(file);
 };
 
+/**
+ * Realiza o calculo da normal
+ *
+ * @param p1
+ * @param p2
+ * @param p3
+ * @param n
+ * @returns {boolean}
+ */
 function calculoDaNormal(p1, p2, p3, n) {
+
     var a = (p3.y - p2.y) * (p1.z - p2.z) - (p1.y - p2.y) * (p3.z - p2.z);
     var b = (p3.z - p2.z) * (p1.x - p2.x) - (p1.z - p2.z) * (p3.x - p2.x);
-    var a = (p3.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p3.y - p2.y);
+    var c = (p3.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p3.y - p2.y);
 
-    return (a * n.x) + (b * n.y) + (c * n.z) > 0;
+    var total = (a * n[0]) + (b * n[1]) + (c * n[2]);
+
+    if (total > 0) {
+        return true
+    } else {
+        return false;
+    }
+}
+
+function facesVisiveis(poligono) {
+    faces_visiveis = [];
+    poligono.faces.forEach(function (face) {
+        console.log(face);
+        if (face.arestas.length > 0) {
+            if (calculoDaNormal(face.arestas[0].pontoA,
+                    face.arestas[0].pontoB,
+                    face.arestas[1].pontoB, v_n)) {
+                faces_visiveis.push(face);
+            }
+        }
+    });
 }

@@ -11,6 +11,9 @@
         var  auxVRP = [vrp[0], vrp[1], vrp[2]];
 
         n = calcula_n(auxVRP, auxP);
+
+        v_n = n;
+
         v = calcula_v(n);
         u = calcula_u(n, v);
 

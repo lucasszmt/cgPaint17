@@ -18,7 +18,12 @@ startCanvas(canvasPerspectiva, context4);
 
 var projetor = criarProjetor([1000, 1000, 1000, 1], [0, 0, 0, 1], 20);
 
+var v_n;
+
 var poligonos3D = [];
+
+var faces_visiveis = [];
+
 var poligono_selected = -1;
 
 var width_default = 400;
