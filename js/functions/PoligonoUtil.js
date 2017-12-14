@@ -44,6 +44,9 @@ function ordenaFaces(faces, coordenada) {
     });
 }
 
+/**
+ * todo pintar todos os poligosno
+ */
 function desenhaPoligono() {
 
     var zoom = 1;
@@ -78,7 +81,7 @@ function desenhaPoligono() {
 
         faces.forEach(function (face) {
 
-            fillPoligonoContext1(face, 'green');
+            fillPoligonoContext1(face, poligono.cor);
 
             context1.strokeStyle = poligono.cor_aresta;
 

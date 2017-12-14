@@ -4,7 +4,7 @@ class Poligono {
         this._arestas = arestas;
         this._vertices = vertices;
         this._faces = faces;
-        this._cor = cor;
+        this._cor = 'white';
         this._cor_aresta = cor_aresta;
     }
 
