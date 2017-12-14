@@ -38,6 +38,12 @@ function criarPoligono(lados, raio, centro) {
     console.log(new Poligono(arestas, vertices, faces, 'white', 'black'))
 }
 
+function ordenaFaces(faces, coordenada) {
+    faces.sort(function(a, b) {
+        return a.centroide[coordenada] - b.centroide[coordenada];
+    });
+}
+
 function desenhaPoligono() {
 
     var zoom = 1;
@@ -52,122 +58,30 @@ function desenhaPoligono() {
 
         context1.strokeStyle = poligono.cor_aresta;
 
-        poligono.faces.forEach(function (face) {
-
-            face.arestas.forEach(function (aresta) {
-
-                context1.beginPath();
-                context1.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.y * zoom);
-                context1.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.y * zoom);
-
-                context1.closePath();
-                context1.stroke();
-
-            });
-
-        });
-    });
-
-    poligonos3D.forEach(function (poligono) {
-
-        context2.strokeStyle = poligono.cor_aresta;
+        var faces = [];
 
         poligono.faces.forEach(function (face) {
-            context2.beginPath();
-            face.arestas.forEach(function (aresta) {
 
+            var norma = calculoDaNormal(face.arestas[0].pontoA,
+                face.arestas[0].pontoB,
+                face.arestas[1].pontoB,
+                new Ponto(200, 150, 1000)
+            );
 
-                context2.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.z * zoom);
-                context2.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.z * zoom);
+            if(norma){
+                faces.push(face);
+            }
 
-
-            });
-            context2.closePath();
-            context2.fillStyle = 'blue';
-            context2.fill();
-
-            context2.stroke();
         });
-    });
 
-    poligonos3D.forEach(function (poligono) {
-
-        context3.strokeStyle = poligono.cor_aresta;
-
-        poligono.faces.forEach(function (face) {
-            face.arestas.forEach(function (aresta) {
-
-                context3.beginPath();
-                context3.moveTo(aresta.pontoA.z * zoom, aresta.pontoA.y * zoom);
-                context3.lineTo(aresta.pontoB.z * zoom, aresta.pontoB.y * zoom);
-                context3.closePath();
-                context3.stroke();
-
-            });
-        });
-    });
-
-    poligonos3D.forEach(function (poligono) {
-
-        context4.strokeStyle = poligono.cor_aresta;
-
-        poligono.faces.forEach(function (face) {
-            face.arestas.forEach(function (aresta) {
-
-                var Mpontos = [];
-
-                Mpontos[0] = [];
-                Mpontos[1] = [];
-                Mpontos[2] = [];
-                Mpontos[3] = [];
-
-                Mpontos[0][0] = aresta.pontoA.x;
-                Mpontos[1][0] = aresta.pontoA.y;
-                Mpontos[2][0] = aresta.pontoA.z;
-                Mpontos[3][0] = 1;
-
-                Mpontos[0][1] = aresta.pontoB.x;
-                Mpontos[1][1] = aresta.pontoB.y;
-                Mpontos[2][1] = aresta.pontoB.z;
-                Mpontos[3][1] = 1;
-
-                var pontosfinal = multiplicaMatriz(projetor, Mpontos);
-
-                for (let j = 0; j < 2; j++) {
-                    pontosfinal[0][j] = pontosfinal[0][j] / pontosfinal[3][j];
-                    pontosfinal[1][j] = pontosfinal[1][j] / pontosfinal[3][j];
-                    pontosfinal[2][j] = pontosfinal[2][j] / pontosfinal[3][j];
-                    pontosfinal[3][j] = pontosfinal[3][j] / pontosfinal[3][j];
-                }
-
-                context4.beginPath();
-                context4.moveTo(pontosfinal[0][0] * zoom, pontosfinal[1][0] * zoom);
-                context4.lineTo(pontosfinal[0][1] * zoom, pontosfinal[1][1] * zoom);
-                context4.closePath();
-                context4.stroke();
-
-            });
-        });
-    });
-
-}
-
-function desenhaPoligonoOcultacao() {
-
-    var zoom = 1;
-
-    if (maximized) {
-        zoom = 2;
-    }
-
-    reeiniciaTela();
-
-    poligonos3D.forEach(function (poligono) {
-
-        context1.strokeStyle = poligono.cor_aresta;
+        ordenaFaces(faces, 'z');
 
         faces.forEach(function (face) {
 
+            fillPoligonoContext1(face, 'green');
+
+            context1.strokeStyle = poligono.cor_aresta;
+
             face.arestas.forEach(function (aresta) {
 
                 context1.beginPath();
@@ -180,27 +94,48 @@ function desenhaPoligonoOcultacao() {
             });
 
         });
+
     });
 
     poligonos3D.forEach(function (poligono) {
 
         context2.strokeStyle = poligono.cor_aresta;
 
+        var faces = [];
+
         poligono.faces.forEach(function (face) {
-            context2.beginPath();
+
+            var norma = calculoDaNormal(face.arestas[0].pontoA,
+                face.arestas[0].pontoB,
+                face.arestas[1].pontoB,
+                new Ponto(200, 1000, 150)
+            );
+
+            if(norma){
+                faces.push(face);
+            }
+
+        });
+
+        ordenaFaces(faces, 'y');
+
+        faces.forEach(function (face) {
+
+            fillPoligonoContext2(face, 'green');
+
+            context2.strokeStyle = poligono.cor_aresta;
+
             face.arestas.forEach(function (aresta) {
 
-
+                context2.beginPath();
                 context2.moveTo(aresta.pontoA.x * zoom, aresta.pontoA.z * zoom);
                 context2.lineTo(aresta.pontoB.x * zoom, aresta.pontoB.z * zoom);
 
+                context2.closePath();
+                context2.stroke();
 
             });
-            context2.closePath();
-            context2.fillStyle = 'blue';
-            context2.fill();
 
-            context2.stroke();
         });
     });
 
@@ -265,6 +200,46 @@ function desenhaPoligonoOcultacao() {
     });
 
 }
+
+function interseccao(Line1, Line2) {
+
+    //Retorna o Ponto interseccao das duas retas
+    // Numerador
+    let p1x = Line1.pontoA.x;
+    let p1y = Line1.pontoA.y;
+    let p2x = Line1.pontoB.x;
+    let p2y = Line1.pontoB.y;
+    let p3x = Line2.pontoA.x;
+    let p3y = Line2.pontoA.y;
+    let p4x = Line2.pontoB.x;
+    let p4y = Line2.pontoB.y;
+
+    let na = (((p4x - p3x) * (p1y - p3y)) - ((p4y - p3y) * (p1x - p3x)));
+    let nb = (((p2x - p1x) * (p1y - p3y)) - ((p2y - p1y) * (p1x - p3x)));
+    // Denominador
+    let da = (((p4y - p3y) * (p2x - p1x)) - ((p4x - p3x) * (p2y - p1y)));
+    let db = (((p4y - p3y) * (p2x - p1x)) - ((p4x - p3x) * (p2y - p1y)));
+
+    let ua = na / da;
+    let ub = nb / db;
+
+    // Se elas são paralelas ou coincidentes
+    if (da == 0 && db == 0) {
+        // Paralelas
+        return null;
+    }
+
+    if (na == 0 && nb == 0) {
+        // Coincidentes
+        return null;
+    }
+
+    let X = p1x + ua * (p2x - p1x);
+    let Y = p1y + ua * (p2y - p1y);
+
+    return new Ponto(parseInt(X), parseInt(Y), 0);  //Retorna o ponto de interseccao
+}
+
 
 function translar(poligono, value1, value2, op) {
 
@@ -424,27 +399,30 @@ function revolucao(poligono, eixo, angulo, secoes, gap) {
     // cria as faces laterais
     poligono.faces.forEach(function (face, index) {
 
-        var arestas = [];
-
-        var face_aux;
-
         if (poligono.faces.length - 1 != index) {
 
-            face_aux = poligono.faces[index + 1];
+            var face_aux = poligono.faces[index + 1];
 
             for (let i = 0; i < face.arestas.length; i++) {
-                arestas.push(face.arestas[i]);
-                arestas.push(face_aux.arestas[i]);
+
+                var arestas = [];
 
                 var a = new Aresta(face.arestas[i].pontoA, face_aux.arestas[i].pontoA);
                 var b = new Aresta(face.arestas[i].pontoB, face_aux.arestas[i].pontoB);
 
-                arestas.push(a);
-                arestas.push(b);
-            }
-        }
+                arestas.push(face.arestas[i]);
 
-        faces_aux.push(new Face(arestas));
+                arestas.push(a);
+
+                arestas.push(face_aux.arestas[i]);
+
+                arestas.push(b);
+
+                faces_aux.push(new Face(arestas));
+            }
+
+
+        }
     });
 
     poligono.faces = faces_aux;
@@ -692,6 +670,7 @@ var openPoligons = function (e) {
     reader.readAsText(file);
 };
 
+
 /**
  * Realiza o calculo da normal
  *
@@ -701,13 +680,15 @@ var openPoligons = function (e) {
  * @param n
  * @returns {boolean}
  */
-function calculoDaNormal(p1, p2, p3, n) {
+function calculoDaNormal(p1, p2, p3, vrp) {
 
     var a = (p3.y - p2.y) * (p1.z - p2.z) - (p1.y - p2.y) * (p3.z - p2.z);
     var b = (p3.z - p2.z) * (p1.x - p2.x) - (p1.z - p2.z) * (p3.x - p2.x);
     var c = (p3.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p3.y - p2.y);
 
-    var total = (a * n[0]) + (b * n[1]) + (c * n[2]);
+    var d = -(a * p2.x) - (b * p2.y) - (c * p2.z);
+
+    var total = (a * vrp.x) + (b * vrp.y) + (c * vrp.z) + d;
 
     if (total > 0) {
         return true
